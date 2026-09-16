@@ -4,7 +4,7 @@ Name your class. Add your textbook and syllabus. Ask away.
 
 Coursekin has two editions: a local study app and a plugin skill for ChatGPT or Codex. They share tutoring guidance but use different storage and interfaces.
 
-[Download Coursekin](https://github.com/agammann/coursekin/releases) · [Browse source](https://github.com/agammann/coursekin) · [Report a problem](https://github.com/agammann/coursekin/issues) · [MIT license](LICENSE)
+[Use the OpenAI plugin](https://chatgpt.com/plugins/plugins_6aaa22656ccc8191902ee998a70c8a86) · [Download the local app](https://github.com/agammann/coursekin/releases) · [Report a problem](https://github.com/agammann/coursekin/issues) · [MIT license](LICENSE)
 
 ![Coursekin local app](docs/coursekin-desktop.png)
 
@@ -62,9 +62,9 @@ The package is in [`plugins/coursekin`](plugins/coursekin). It contains a plugin
 
 The plugin has no Coursekin server, credentials or background uploads. File access, retention and availability across chats follow the host product. Classes do not automatically synchronize between the plugin and local app.
 
-The package passes the local OpenAI manifest validator, installs in Codex, and passes the OpenAI portal's automated skill scan. The directory listing is a saved draft awaiting publisher attestations. Full tutoring behavior in a fresh host chat and public directory review are separate release steps. See [plugin test cases and publishing status](docs/plugin-release.md). This source bundle does not imply that the plugin is already published or approved.
+Coursekin 0.1.0 is approved and published in the [OpenAI plugin directory](https://chatgpt.com/plugins/plugins_6aaa22656ccc8191902ee998a70c8a86). The package passes the local manifest validator, installs in Codex, and passes the portal's automated skill scan. Full tutoring behavior in a fresh host chat remains a separate acceptance check. See [plugin test cases and publishing status](docs/plugin-release.md).
 
-The release includes `coursekin-plugin.zip` for hosts that support local plugin package installation. After installation, start a new chat and choose Coursekin, then provide your class name and attach your textbook and syllabus. The public directory installation link will be added after approval and publication.
+The release also includes `coursekin-plugin.zip` for hosts that support local plugin package installation. After installation, start a new chat and choose Coursekin, then provide your class name and attach your textbook and syllabus.
 
 ## Development
 

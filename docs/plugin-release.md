@@ -1,10 +1,10 @@
 # Plugin release preparation
 
-The package implements the class setup and tutoring workflow through a host skill. The local web interface is a separate distribution. The plugin is installed in the publisher's local Codex personal marketplace, and the host exposes `coursekin:course-assistant`. OpenAI's portal accepted the ZIP and its automated skill scan reports Passed. The public listing is a saved draft awaiting publisher attestations. The full fresh chat acceptance tests, submission, approval and directory publication remain separate steps.
+The package implements the class setup and tutoring workflow through a host skill. The local web interface is a separate distribution. The plugin is installed in the publisher's local Codex personal marketplace, and the host exposes `coursekin:course-assistant`. OpenAI's portal accepted the ZIP and its automated skill scan reports Passed. Version 0.1.0 is approved and published at [Coursekin in the OpenAI directory](https://chatgpt.com/plugins/plugins_6aaa22656ccc8191902ee998a70c8a86). The full fresh chat acceptance tests remain pending.
 
 OpenAI supports skills only submissions. Its [submission documentation](https://developers.openai.com/plugins/deploy/submission) requires a verified developer identity, listing information, the final skill bundle, starter prompts, test cases, availability and policy attestations. Review and publishing are separate steps.
 
-The draft uses the verified publisher identity ALEXANDER GREGORY AMMANN, the public GitHub repository as its website, GitHub issues for support, and this repository's PRIVACY.md and TERMS.md as policy links. The skills only flow did not ask for a country selection. Its final screen requires agreement to OpenAI's terms and guidelines, a compliance attestation, acceptance of responsibility for applicable laws, and confirmation that the plugin is not designed for or marketed to children under 13. These statements await the publisher's explicit confirmation.
+The listing uses the verified publisher identity ALEXANDER GREGORY AMMANN, the public GitHub repository as its website, GitHub issues for support, and this repository's PRIVACY.md and TERMS.md as policy links. The skills only flow did not ask for a country selection. The publisher explicitly confirmed all four final attestations: agreement to OpenAI's terms and guidelines, compliance with them, responsibility for applicable laws, and that Coursekin is not designed for or marketed to children under 13.
 
 ## Starter prompts
 
