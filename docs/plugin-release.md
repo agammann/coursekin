@@ -1,10 +1,10 @@
 # Plugin release preparation
 
-The package implements the class setup and tutoring workflow through a host skill. The local web interface is a separate distribution. The plugin has not yet been installed and tested in a fresh ChatGPT or Codex session, submitted, approved or published.
+The package implements the class setup and tutoring workflow through a host skill. The local web interface is a separate distribution. The plugin is installed in the publisher's local Codex personal marketplace, and the host exposes `coursekin:course-assistant`. OpenAI's portal accepted the ZIP and its automated skill scan reports Passed. The public listing is a saved draft awaiting publisher attestations. The full fresh chat acceptance tests, submission, approval and directory publication remain separate steps.
 
 OpenAI supports skills only submissions. Its [submission documentation](https://developers.openai.com/plugins/deploy/submission) requires a verified developer identity, listing information, the final skill bundle, starter prompts, test cases, availability and policy attestations. Review and publishing are separate steps.
 
-Publisher identity, support contact, public policy URLs and country availability must reflect the actual publisher. These are not invented in this bundle. Complete and verify them before a public submission.
+The draft uses the verified publisher identity ALEXANDER GREGORY AMMANN, the public GitHub repository as its website, GitHub issues for support, and this repository's PRIVACY.md and TERMS.md as policy links. The skills only flow did not ask for a country selection. Its final screen requires agreement to OpenAI's terms and guidelines, a compliance attestation, acceptance of responsibility for applicable laws, and confirmation that the plugin is not designed for or marketed to children under 13. These statements await the publisher's explicit confirmation.
 
 ## Starter prompts
 

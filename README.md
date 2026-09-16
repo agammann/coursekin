@@ -4,7 +4,7 @@ Name your class. Add your textbook and syllabus. Ask away.
 
 Coursekin has two editions: a local study app and a plugin skill for ChatGPT or Codex. They share tutoring guidance but use different storage and interfaces.
 
-[Download the source](https://github.com/agammann/coursekin/archive/refs/heads/main.zip) · [Report a problem](https://github.com/agammann/coursekin/issues) · [MIT license](LICENSE)
+[Download Coursekin](https://github.com/agammann/coursekin/releases) · [Browse source](https://github.com/agammann/coursekin) · [Report a problem](https://github.com/agammann/coursekin/issues) · [MIT license](LICENSE)
 
 ![Coursekin local app](docs/coursekin-desktop.png)
 
@@ -16,7 +16,7 @@ On Windows, double click **Start Coursekin.cmd**. On macOS or Linux, run `sh sta
 
 On first launch, paste your own OpenAI API key into the private terminal prompt. The key is hidden while you type. It is saved in `.env.local`, which is excluded from Git and release archives. API usage uses your own OpenAI billing. The plugin edition does not require a separate key.
 
-The launch scripts are provided for Windows, macOS and Linux. Development and browser verification were performed on Windows; the other two launchers have not been exercised on those operating systems.
+The automated tests and package builds pass on Windows, macOS and Linux in [GitHub Actions](https://github.com/agammann/coursekin/actions). Interactive development and browser verification were performed on Windows; the other two launchers have not been exercised interactively on those operating systems.
 
 For a manual setup:
 
@@ -62,7 +62,9 @@ The package is in [`plugins/coursekin`](plugins/coursekin). It contains a plugin
 
 The plugin has no Coursekin server, credentials or background uploads. File access, retention and availability across chats follow the host product. Classes do not automatically synchronize between the plugin and local app.
 
-The package passes the local OpenAI plugin manifest validator. Installation in a fresh host session and public directory review are separate release steps. See [plugin test cases and publishing requirements](docs/plugin-release.md). This source bundle does not imply that the plugin is already published or approved.
+The package passes the local OpenAI manifest validator, installs in Codex, and passes the OpenAI portal's automated skill scan. The directory listing is a saved draft awaiting publisher attestations. Full tutoring behavior in a fresh host chat and public directory review are separate release steps. See [plugin test cases and publishing status](docs/plugin-release.md). This source bundle does not imply that the plugin is already published or approved.
+
+The release includes `coursekin-plugin.zip` for hosts that support local plugin package installation. After installation, start a new chat and choose Coursekin, then provide your class name and attach your textbook and syllabus. The public directory installation link will be added after approval and publication.
 
 ## Development
 
