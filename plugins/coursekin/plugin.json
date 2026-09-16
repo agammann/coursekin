@@ -1,0 +1,8 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "coursekin",
+  "version": "0.1.0",
+  "description": "Name your class, attach your textbook and syllabus, and ask grounded homework questions.",
+  "author": { "name": "Coursekin" },
+  "keywords": ["education", "textbook", "syllabus", "homework", "tutoring"]
+}

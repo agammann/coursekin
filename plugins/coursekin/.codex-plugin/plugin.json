@@ -1,0 +1,18 @@
+{
+  "name": "coursekin",
+  "version": "0.1.0",
+  "description": "Name your class, attach your textbook and syllabus, and ask grounded homework questions.",
+  "author": {
+    "name": "Coursekin"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Coursekin",
+    "shortDescription": "Your class, ready when you are.",
+    "longDescription": "Create a study assistant from your class name, textbook and syllabus. Ask for explanations, practice questions, feedback on your reasoning, or course policies with verified source references. Uses your host's native attachments and conversation; no separate Coursekin account or API key.",
+    "developerName": "Coursekin",
+    "category": "Education",
+    "capabilities": [],
+    "defaultPrompt": "Set up my class in Coursekin using my textbook and syllabus."
+  }
+}
