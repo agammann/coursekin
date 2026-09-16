@@ -4,6 +4,8 @@ Name your class. Add your textbook and syllabus. Ask away.
 
 Coursekin has two editions: a local study app and a plugin skill for ChatGPT or Codex. They share tutoring guidance but use different storage and interfaces.
 
+[Download the source](https://github.com/agammann/coursekin/archive/refs/heads/main.zip) · [Report a problem](https://github.com/agammann/coursekin/issues) · [MIT license](LICENSE)
+
 ![Coursekin local app](docs/coursekin-desktop.png)
 
 ## Local app
@@ -73,3 +75,5 @@ python -m coursekin.server
 Set `COURSEKIN_PORT` to change the local port or `COURSEKIN_DATA_DIR` to choose a different database directory. The frontend is plain HTML, CSS and JavaScript, with no build step, CDN, analytics or remote font requests.
 
 Read [security boundaries](SECURITY.md), [design references](docs/design-sources.md), and [verification notes](docs/verification.md) for the implementation scope and tested behavior.
+
+[Privacy](PRIVACY.md) · [Usage information](TERMS.md). Copyright 2026 Alexander Gregory Ammann. Coursekin code and original project assets are available under the MIT License. Uploaded course materials retain their own rights.

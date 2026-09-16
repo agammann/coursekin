@@ -3,16 +3,30 @@
   "version": "0.1.0",
   "description": "Name your class, attach your textbook and syllabus, and ask grounded homework questions.",
   "author": {
-    "name": "Coursekin"
+    "name": "Alexander Gregory Ammann",
+    "url": "https://github.com/agammann"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "Coursekin",
     "shortDescription": "Your class, ready when you are.",
     "longDescription": "Create a study assistant from your class name, textbook and syllabus. Ask for explanations, practice questions, feedback on your reasoning, or course policies with verified source references. Uses your host's native attachments and conversation; no separate Coursekin account or API key.",
-    "developerName": "Coursekin",
-    "category": "Education",
+    "developerName": "Alexander Gregory Ammann",
+    "category": "Education & Research",
     "capabilities": [],
-    "defaultPrompt": "Set up my class in Coursekin using my textbook and syllabus."
-  }
+    "defaultPrompt": [
+      "Set up my class with my textbook and syllabus.",
+      "Explain this textbook passage.",
+      "Check my reasoning and give me a hint."
+    ],
+    "websiteURL": "https://github.com/agammann/coursekin",
+    "privacyPolicyURL": "https://github.com/agammann/coursekin/blob/main/PRIVACY.md",
+    "termsOfServiceURL": "https://github.com/agammann/coursekin/blob/main/TERMS.md",
+    "brandColor": "#414ee0",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png"
+  },
+  "homepage": "https://github.com/agammann/coursekin",
+  "repository": "https://github.com/agammann/coursekin",
+  "license": "MIT"
 }

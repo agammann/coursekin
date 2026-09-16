@@ -3,6 +3,18 @@
   "name": "coursekin",
   "version": "0.1.0",
   "description": "Name your class, attach your textbook and syllabus, and ask grounded homework questions.",
-  "author": { "name": "Coursekin" },
-  "keywords": ["education", "textbook", "syllabus", "homework", "tutoring"]
+  "author": {
+    "name": "Alexander Gregory Ammann",
+    "url": "https://github.com/agammann"
+  },
+  "keywords": [
+    "education",
+    "textbook",
+    "syllabus",
+    "homework",
+    "tutoring"
+  ],
+  "homepage": "https://github.com/agammann/coursekin",
+  "repository": "https://github.com/agammann/coursekin",
+  "license": "MIT"
 }

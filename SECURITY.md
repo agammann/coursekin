@@ -13,3 +13,7 @@ Model requests go to a fixed OpenAI HTTPS endpoint. The browser cannot provide a
 Classes are separated by database identifiers and query filters. Successful exchanges are saved together. Failed imports do not create a partially populated class. Invalid model citation numbers do not become source links. Export includes extracted passages and history but never credentials.
 
 Before distributing, run the tests and the allowlist based packaging script. The script rejects keys and secret files in archives. Public deployment would need a separate authentication, storage, tenancy, transport security and abuse prevention design.
+
+## Reporting a vulnerability
+
+Use GitHub's private vulnerability reporting feature when available on this repository. Do not post secrets or exploit details in a public issue. If private reporting is unavailable, open a public issue asking the maintainer for a private reporting channel without including sensitive details.

@@ -5,7 +5,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-TOP_FILES = {'README.md', 'SECURITY.md', 'requirements.txt', '.gitignore', '.gitattributes', 'setup_key.py', 'launch.py', 'Start Coursekin.cmd', 'start.sh', 'package_release.py'}
+TOP_FILES = {'README.md', 'SECURITY.md', 'PRIVACY.md', 'TERMS.md', 'LICENSE', 'requirements.txt', '.gitignore', '.gitattributes', 'setup_key.py', 'launch.py', 'Start Coursekin.cmd', 'start.sh', 'package_release.py'}
 DIRECTORIES = {'coursekin', 'web', 'plugins', 'tests', 'docs', '.github'}
 EXTENSIONS = {'.py', '.html', '.css', '.js', '.svg', '.md', '.json', '.png', '.jpg', '.yml', '.yaml', '.txt'}
 
@@ -18,7 +18,7 @@ def files():
             raise ValueError('A linked file cannot be packaged: ' + path.as_posix())
         if '__pycache__' in path.parts:
             continue
-        if (len(path.parts) == 1 and file.name in TOP_FILES) or (len(path.parts) > 1 and path.parts[0] in DIRECTORIES and file.suffix in EXTENSIONS):
+        if (len(path.parts) == 1 and file.name in TOP_FILES) or (len(path.parts) > 1 and path.parts[0] in DIRECTORIES and (file.suffix in EXTENSIONS or file.name == 'LICENSE')):
             if any(part.startswith('.env') or part in {'data', '.git', '.venv', 'node_modules'} for part in path.parts):
                 raise ValueError('Private path found: ' + path.as_posix())
             yield file, path
