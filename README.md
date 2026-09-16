@@ -4,7 +4,9 @@ Name your class. Add your textbook and syllabus. Ask away.
 
 Coursekin has two editions: a local study app and a plugin skill for ChatGPT or Codex. They share tutoring guidance but use different storage and interfaces.
 
-[Use the OpenAI plugin](https://chatgpt.com/plugins/plugins_6aaa22656ccc8191902ee998a70c8a86) · [Download the local app](https://github.com/agammann/coursekin/releases) · [Report a problem](https://github.com/agammann/coursekin/issues) · [MIT license](LICENSE)
+[Visit Coursekin](https://coursekin.alx21.chatgpt.site) · [Use the OpenAI plugin](https://chatgpt.com/plugins/plugins_6aaa22656ccc8191902ee998a70c8a86) · [Download the local app](https://github.com/agammann/coursekin/releases) · [Report a problem](https://github.com/agammann/coursekin/issues) · [MIT license](LICENSE)
+
+The public website is hosted on OpenAI Sites and links to both editions. It works independently of the local app and does not accept course uploads, offer website chat or collect API keys. Use the plugin for the hosted conversation experience, or download the app to use the custom class workspace on your own computer.
 
 ![Coursekin local app](docs/coursekin-desktop.png)
 

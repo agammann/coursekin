@@ -4,6 +4,10 @@ Effective September 15, 2026.
 
 Coursekin is published by Alexander Gregory Ammann. This notice covers the Coursekin source distribution and plugin.
 
+## Public website
+
+The public entry website at [coursekin.alx21.chatgpt.site](https://coursekin.alx21.chatgpt.site) is hosted by OpenAI Sites. It contains links to the plugin and local download, with no Coursekin upload form, API key field, chat service or analytics script. Hosting infrastructure may process request information under its own policies. Following an external link takes you to that service and its privacy practices.
+
 ## Local app
 
 The app stores extracted course text, class names and conversations in a SQLite database on your computer. Original uploaded file binaries are processed temporarily and are not retained as stored course files. Deleting a class removes its records from the app, but is not a secure erase of disk sectors or copies you exported or backed up.
