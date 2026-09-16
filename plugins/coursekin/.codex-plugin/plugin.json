@@ -9,9 +9,9 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Coursekin",
-    "shortDescription": "Your class, ready when you are.",
+    "shortDescription": "Study your class materials",
     "longDescription": "Create a study assistant from your class name, textbook and syllabus. Ask for explanations, practice questions, feedback on your reasoning, or course policies with verified source references. Uses your host's native attachments and conversation; no separate Coursekin account or API key.",
-    "developerName": "Alexander Gregory Ammann",
+    "developerName": "ALEXANDER GREGORY AMMANN",
     "category": "Education & Research",
     "capabilities": [],
     "defaultPrompt": [

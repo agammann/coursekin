@@ -1,10 +1,16 @@
 """Memory boundary for the disposable document reader process."""
 import os
+import sys
+import subprocess
+import threading
 
 _job = None
 
 def limit_parser_memory():
     maximum = 768 * 1024 * 1024
+    if sys.platform == 'darwin':
+        # macOS rejects RLIMIT_AS. The parent monitors resident memory instead.
+        return
     if os.name != 'nt':
         import resource
         resource.setrlimit(resource.RLIMIT_AS, (maximum, maximum))
@@ -38,3 +44,50 @@ def limit_parser_memory():
     limits.process_memory = maximum
     if not _job or not kernel.SetInformationJobObject(_job, 9, ctypes.byref(limits), ctypes.sizeof(limits)) or not kernel.AssignProcessToJobObject(_job, kernel.GetCurrentProcess()):
         raise RuntimeError('Could not establish the document memory limit.')
+
+
+def run_parser(command, *, input, env, cwd, timeout=45):
+    if sys.platform != 'darwin':
+        return subprocess.run(command, input=input, env=env, cwd=cwd, timeout=timeout,
+                              stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, check=True)
+    return run_macos_parser(command, input=input, env=env, cwd=cwd, timeout=timeout)
+
+
+def run_macos_parser(command, *, input, env, cwd, timeout, maximum=768 * 1024 * 1024):
+    """Terminate readers crossing an RSS threshold; sampling can briefly overshoot."""
+    import psutil
+    stopped = threading.Event()
+    failed = threading.Event()
+    with subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                          stderr=subprocess.DEVNULL, env=env, cwd=cwd) as child:
+        process = psutil.Process(child.pid)
+
+        def monitor():
+            try:
+                while not stopped.is_set():
+                    if process.memory_info().rss > maximum:
+                        failed.set()
+                        child.kill()
+                        return
+                    stopped.wait(0.02)
+            except psutil.NoSuchProcess:
+                return
+            except Exception:
+                # A reader must not continue if memory monitoring fails.
+                failed.set()
+                if child.poll() is None:
+                    child.kill()
+
+        watcher = threading.Thread(target=monitor, daemon=True)
+        watcher.start()
+        try:
+            output, _ = child.communicate(input=input, timeout=timeout)
+            if failed.is_set() or child.returncode:
+                raise RuntimeError('Document reader exceeded its resource limits.')
+            return subprocess.CompletedProcess(command, child.returncode, output)
+        finally:
+            if child.poll() is None:
+                child.kill()
+                child.communicate()
+            stopped.set()
+            watcher.join()

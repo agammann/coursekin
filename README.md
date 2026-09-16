@@ -12,7 +12,7 @@ Coursekin has two editions: a local study app and a plugin skill for ChatGPT or 
 
 Install Python 3.12 or newer from [python.org](https://www.python.org/downloads/).
 
-On Windows, double click **Start Coursekin.cmd**. On macOS or Linux, run `sh start.sh`. The launcher creates a virtual environment and installs the pinned PDF reader on first use. It opens Coursekin at `http://127.0.0.1:8767`.
+On Windows, double click **Start Coursekin.cmd**. On macOS or Linux, run `sh start.sh`. The launcher creates a virtual environment and installs the pinned dependencies on first use. It opens Coursekin at `http://127.0.0.1:8767`.
 
 On first launch, paste your own OpenAI API key into the private terminal prompt. The key is hidden while you type. It is saved in `.env.local`, which is excluded from Git and release archives. API usage uses your own OpenAI billing. The plugin edition does not require a separate key.
 

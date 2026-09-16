@@ -9,6 +9,7 @@ import urllib.request
 import zipfile
 import os
 import subprocess
+import sys
 from unittest.mock import patch
 from pathlib import Path
 
@@ -42,11 +43,22 @@ class Documents(unittest.TestCase):
 
     def test_parser_has_no_provider_credentials(self):
         parsed = json.dumps({'chunks': [{'location': 'Line 1', 'text': 'example'}]}).encode()
-        with patch.dict(os.environ, {'OPENAI_API_KEY': 'test-private-marker', 'OTHER_SECRET': 'also-private'}), patch('coursekin.server.subprocess.run', return_value=subprocess.CompletedProcess([], 0, parsed)) as run:
+        with patch.dict(os.environ, {'OPENAI_API_KEY': 'test-private-marker', 'OTHER_SECRET': 'also-private'}), patch('coursekin.server.run_parser', return_value=subprocess.CompletedProcess([], 0, parsed)) as run:
             prepare_documents([doc('textbook', 'example')])
             env = run.call_args.kwargs['env']
             self.assertNotIn('OPENAI_API_KEY', env)
             self.assertNotIn('OTHER_SECRET', env)
+
+    @unittest.skipUnless(sys.platform == 'darwin', 'macOS memory monitor')
+    def test_macos_reader_memory_and_timeout(self):
+        from coursekin.limits import run_macos_parser
+        options = {'input': b'', 'env': {}, 'cwd': Path(__file__).resolve().parents[1], 'timeout': 5, 'maximum': 64 * 1024 * 1024}
+        # Exercise a real disposable process, including the threshold and deadline.
+        with self.assertRaises(RuntimeError):
+            run_macos_parser([sys.executable, '-c', 'import time; data=bytearray(128*1024*1024); time.sleep(3)'], **options)
+        options['timeout'] = 0.2
+        with self.assertRaises(subprocess.TimeoutExpired):
+            run_macos_parser([sys.executable, '-c', 'import time; time.sleep(3)'], **options)
 
     def test_text_locations_and_bounds(self):
         chunks = extract('reading.txt', ('photosynthesis\n' * 120).encode())

@@ -14,6 +14,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 from .store import Store
+from .limits import run_parser
 from .provider import load_environment, answer, ProviderError, DEFAULT_MODEL
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -49,7 +50,7 @@ def prepare_documents(items):
         try:
             # Readers never need provider credentials or user supplied Python paths.
             reader_env = {k: v for k, v in os.environ.items() if k.upper() in {'SYSTEMROOT', 'WINDIR', 'PATH', 'TEMP', 'TMP', 'LANG', 'LC_ALL'}}
-            result = subprocess.run([sys.executable, '-m', 'coursekin.documents', name], input=raw, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, cwd=ROOT, timeout=45, check=True, env=reader_env)
+            result = run_parser([sys.executable, '-m', 'coursekin.documents', name], input=raw, cwd=ROOT, timeout=45, env=reader_env)
             decoded = json.loads(result.stdout)
         except subprocess.TimeoutExpired:
             raise BadRequest('Reading this file took too long. Please upload a smaller section.') from None
