@@ -10,7 +10,8 @@ import package_release
 class PackageIsolation(unittest.TestCase):
     def test_virtual_environment_links_are_excluded_but_source_links_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
+            # Match the packager's resolved root, including Windows temp-path aliases.
+            root = Path(directory).resolve()
             (root / 'README.md').write_text('Coursekin')
             (root / '.venv/bin').mkdir(parents=True)
             try:
