@@ -47,7 +47,7 @@ The implementation was checked for faithful layout, hierarchy and interaction ag
 
 The generated imagery is a design reference, not proof of runtime behavior. The screenshots named `coursekin-desktop.png`, `coursekin-mobile.png` and `coursekin-chat.png` show the actual app.
 
-The plugin was initially installed through the publisher's local personal marketplace and appeared as `coursekin:course-assistant`. This is historical publisher setup, not an installation command for other users. OpenAI's portal accepted the package, passed its skill scan and published it after the publisher's attestations. The [public directory listing](https://chatgpt.com/plugins/plugins_6aaa22656ccc8191902ee998a70c8a86) and September 19 fresh chat checks are recorded above; untested host acceptance cases remain listed in [plugin release](plugin-release.md).
+The plugin was initially installed through the publisher's local personal marketplace and appeared as `coursekin:course-assistant`. This is historical publisher setup, not an installation command for other users. The publisher completed the attestations and submitted the package; the portal accepted it after its skill scan. The [public directory listing](https://chatgpt.com/plugins/plugins_6aaa22656ccc8191902ee998a70c8a86) and September 19 fresh chat checks are recorded above; untested host acceptance cases remain listed in [plugin release](plugin-release.md).
 
 The source is public at [agammann/coursekin](https://github.com/agammann/coursekin) under MIT. GitHub Actions validates all three operating systems. Interactive browser and launcher behavior was exercised on Windows; macOS and Linux interactive launches remain unverified.
 
