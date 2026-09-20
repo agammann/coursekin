@@ -1,6 +1,18 @@
 # Verification
 
-Verified locally on Windows with Python 3.12 and the Codex in app browser on September 15, 2026. This document distinguishes completed checks from release work still pending.
+Initial checks ran on Windows with Python 3.12 and the Codex in app browser on September 15, 2026. The follow-up below records live checks on September 19. Historical checks are preserved rather than presented as newly rerun evidence.
+
+## September 19 real usage checks
+
+Downloaded the public v0.1.0 source ZIP into a fresh directory and created a new Python virtual environment. In the actual browser UI, imported the fictional PDF textbook and DOCX syllabus, asked a live OpenAI question spanning both sources, opened the matching syllabus citation and reloaded the saved conversation. The answer correctly identified 40 percent and thylakoid membranes. No local app console warnings or errors were observed. Desktop and a narrow mobile viewport rendered without horizontal overflow.
+
+A separate live HTTP flow imported an original 100 page fictional PDF and syllabus. Retrieval found the invented Lumenfern pigment fact on PDF page 87 and combined it with the correct 65 percent exam weight from that class's syllabus. A missing policy question correctly identified absent information. Export contained the four saved messages and extracted passages, with no API key fields. A malformed PDF was rejected without creating a partial class. Deleting that disposable test class removed it.
+
+The published plugin was installed from its public listing and used in a fresh ChatGPT Work conversation with the two fictional attachments. It read both, answered correctly with source locations, identified the absent late work policy, and paused after one practice question. This closes the previously pending basic fresh host tutoring check; it does not prove every proposed adversarial case or every host configuration.
+
+Found and fixed a launcher recovery defect: a partial `.venv` caused later launches to skip dependency installation. The shared bootstrap now checks the environment and repairs missing pinned dependencies, including a missing pip installation. A newly extracted candidate archive with an intentionally incomplete environment repaired itself and the actual Windows launcher served the app successfully. Failed key enrollment now stops launch. Two regression tests cover retry behavior and rejected enrollment, and CI also exercises clean bootstrap preparation on each operating system.
+
+These are author-run acceptance checks using fictional materials and real provider calls, not feedback from recruited students. Interactive macOS/Linux launches, very large textbooks near the resource limits, scanned PDF OCR, and broad accessibility coverage remain outside this pass.
 
 ## Completed
 
@@ -35,7 +47,7 @@ The implementation was checked for faithful layout, hierarchy and interaction ag
 
 The generated imagery is a design reference, not proof of runtime behavior. The screenshots named `coursekin-desktop.png`, `coursekin-mobile.png` and `coursekin-chat.png` show the actual app.
 
-The plugin was installed through `codex plugin add coursekin@personal` and appears in the host's available skills as `coursekin:course-assistant`. OpenAI's portal accepted the package and its skill scan reports Passed. After the publisher explicitly authorized all four attestations, the portal showed Approved. Publishing and refreshing then showed Published with the [public directory link](https://chatgpt.com/plugins/plugins_6aaa22656ccc8191902ee998a70c8a86). These are installation, package and publication checks; the full plugin acceptance cases have not been run in a fresh host session.
+The plugin was initially installed through the publisher's local personal marketplace and appeared as `coursekin:course-assistant`. This is historical publisher setup, not an installation command for other users. OpenAI's portal accepted the package, passed its skill scan and published it after the publisher's attestations. The [public directory listing](https://chatgpt.com/plugins/plugins_6aaa22656ccc8191902ee998a70c8a86) and September 19 fresh chat checks are recorded above; untested host acceptance cases remain listed in [plugin release](plugin-release.md).
 
 The source is public at [agammann/coursekin](https://github.com/agammann/coursekin) under MIT. GitHub Actions validates all three operating systems. Interactive browser and launcher behavior was exercised on Windows; macOS and Linux interactive launches remain unverified.
 
