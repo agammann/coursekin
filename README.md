@@ -6,7 +6,17 @@ Coursekin helps you understand course material, practice a problem and check wha
 
 **[Visit Coursekin](https://coursekin.alx21.chatgpt.site)** · [OpenAI plugin](https://chatgpt.com/plugins/plugins_6aaa22656ccc8191902ee998a70c8a86) · [Download](https://github.com/agammann/coursekin/releases/latest) · [Get help](https://github.com/agammann/coursekin/issues)
 
-## Choose your edition
+## Run directly in your browser
+
+The [Coursekin website](https://coursekin.alx21.chatgpt.site) now includes the study workspace. Create a class, add PDF/DOCX/TXT/Markdown materials and ask questions with source references. No account, API key or paid AI API is needed. Files, extracted text and conversations stay in this browser's local storage; export a class backup to keep them safe.
+
+The first generation downloads a browser model from public hosts. WebGPU, compatible graphics hardware and sufficient storage/memory are required. Answers run on the visitor's device and can be wrong; inspect the cited excerpts. See [the browser edition guide](web/README.md) for limits, source layout and local preview.
+
+## Earlier editions
+
+The host plugin and packaged Python app below remain separate editions. Their releases have not been rebuilt as browser inference apps; the earlier local app still uses its own configured provider. Use the website above for the no-paid-API workflow.
+
+### Edition comparison
 
 | | OpenAI plugin | Local app |
 | :--- | :--- | :--- |
@@ -17,7 +27,7 @@ Coursekin helps you understand course material, practice a problem and check wha
 | Answers | Uses the host model | Sends questions, recent conversation and selected excerpts to OpenAI |
 | Start here | [Plugin guide](docs/plugin-guide.md) | [Local app guide](docs/local-app.md) |
 
-The public OpenAI Sites website links to these two editions. Uploads and tutoring take place in the edition you choose. Classes do not automatically sync between them. The local app needs an internet connection for model answers.
+The public website now supports its own browser study workflow. The older plugin and Python app handle materials separately. Classes do not automatically sync between them. The local app needs an internet connection for model answers.
 
 ## Start with the plugin
 

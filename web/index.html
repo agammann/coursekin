@@ -1,36 +1,50 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Coursekin · Your class, ready when you are</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Coursekin · Study your class materials</title>
+  <meta name="description" content="Name your class, add your textbook and syllabus, and start asking questions. Study directly in your browser with no paid AI API.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
-<aside class="sidebar">
-  <a class="brand" href="/" aria-label="Coursekin home">Coursekin<span class="brand-dot">.</span></a>
-  <button id="new-class" class="primary new-class"><span aria-hidden="true">＋</span> New class</button>
-  <p class="nav-label">Your classes</p>
-  <nav id="classes" aria-label="Your classes"></nav>
-  <div class="sidebar-bottom"><button id="settings-button" class="quiet"><span aria-hidden="true">⚙</span> Settings</button></div>
-</aside>
-<main id="main">
-  <section id="setup" class="setup">
-    <header class="intro"><h1>A little context.<br>A lot of <em>clarity.</em></h1><p>Name your class, add your books, and ask away.</p></header>
-    <form id="class-form">
-      <label class="field-label" for="class-name">Class name</label>
-      <input id="class-name" name="name" placeholder="e.g. Biology 101" maxlength="100" required autocomplete="off">
-      <div id="setup-documents" class="document-grid"></div>
-      <p class="privacy-note">Your files stay on this computer. Relevant passages are sent to OpenAI when you ask a question.</p>
-      <button id="create-class" class="primary wide" type="submit">Start asking questions <span aria-hidden="true">→</span></button>
-      <p class="footnote" id="import-status" role="status">Your class, ready when you are.</p>
-    </form>
-  </section>
-  <section id="chat" class="chat hidden" aria-label="Class chat">
-    <header class="chat-header"><div><p class="nav-label">Your study space</p><h1 id="chat-title"></h1></div><button id="materials-button" class="secondary">Course materials</button></header>
-    <div id="messages" class="messages" aria-live="polite"></div>
-    <div id="chat-welcome" class="chat-welcome"><div class="book-mark" aria-hidden="true">✳</div><h2>Let’s make it click.</h2><p>Your textbook and syllabus are ready.<br>Ask a question, work through an idea, or check your reasoning.</p><div class="suggestions"><button type="button">What will we cover in this class?</button><button type="button">Help me understand the first topic.</button><button type="button">What does the syllabus say about grading?</button></div></div>
-    <form id="question-form" class="composer"><label class="sr-only" for="question">Ask about your class</label><textarea id="question" rows="2" maxlength="6000" placeholder="Ask about your class…" required></textarea><button id="send" class="primary" type="submit" aria-label="Send question">↑</button><p id="answer-status" role="status">Grounded in your materials. Check source references for important details.</p></form>
-  </section>
-</main>
-<div id="toast" role="alert" class="toast hidden"></div>
-<dialog id="settings-dialog"><form method="dialog"><button class="close" aria-label="Close settings">×</button></form><h2>A space of your own.</h2><p>Coursekin stores extracted course text and chat history on this computer. It sends your question, recent conversation and selected passages to OpenAI to generate an answer.</p><div class="setting-row"><span>OpenAI connection</span><strong id="connection-status"></strong></div><div class="setting-row"><span>Model</span><strong id="model-name"></strong></div><p id="key-help" class="muted">Keys stay in the server environment. To connect or replace your own key, stop the app and run <code>python setup_key.py</code>, then start it again.</p><p class="muted">This app runs locally and uses an online model. Scanned PDFs need OCR first. Text extraction can miss diagrams and complex equations.</p><p class="muted">The ChatGPT plugin uses ChatGPT’s own attachments and storage. Classes are not automatically synced between the two versions.</p></dialog>
-<dialog id="materials-dialog"><form method="dialog"><button class="close" aria-label="Close materials">×</button></form><h2>Course materials</h2><p class="muted">The context behind your conversations.</p><div id="material-list"></div><details class="add-materials"><summary>Add more material</summary><form id="add-form"><div id="add-documents" class="document-grid"></div><button id="add-submit" class="primary wide">Add to this class</button><p id="add-status" class="muted" role="status"></p></form></details><div class="dialog-actions"><button id="export" class="secondary">Export class</button><button id="delete" class="danger">Delete class</button></div><p class="muted fine">Exports include your course text and conversation. Keep them private.</p></dialog>
-<dialog id="source-dialog"><form method="dialog"><button class="close" aria-label="Close source">×</button></form><p class="nav-label">From your materials</p><h2 id="source-title"></h2><p id="source-location" class="muted"></p><blockquote id="source-text"></blockquote><p class="muted fine">This is an extracted passage. PDF page numbers refer to the file’s page order.</p></dialog>
-<dialog id="delete-dialog"><h2>Delete this class?</h2><p>This removes the saved text and conversation from Coursekin. Your original files are unchanged. Export first if you want a copy.</p><div class="dialog-actions"><button id="cancel-delete" class="secondary">Keep class</button><button id="confirm-delete" class="danger">Delete this class</button></div></dialog>
-</body></html>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Coursekin home"><img src="favicon.svg" alt="" width="34" height="34">coursekin<span class="brand-dot">.</span></a>
+    <a class="source-link" href="https://github.com/agammann/coursekin">View on GitHub <span aria-hidden="true">↗</span></a>
+  </header>
+  <main>
+    <section class="start" aria-labelledby="title">
+      <div class="intro">
+        <p class="eyebrow">YOUR CLASS. YOUR MATERIALS.</p>
+        <h1 id="title">A little help.<br>A lot more <em>understanding.</em></h1>
+        <p class="lead">Name your class. Add your textbook and syllabus. Ask the questions that get you unstuck.</p>
+      </div>
+      <section class="study" aria-label="Your study space">
+        <div class="section-heading"><h2>Your study space</h2><p>Files, conversations and model inference stay on this device. Export a backup before clearing browser data.</p></div>
+        <div class="class-actions"><label>Class<select id="class-select" aria-label="Choose class"></select></label><form id="class-form"><label>New class name<input id="class-name" maxlength="100" required placeholder="Biology 101"></label><button class="button secondary">Add class</button></form></div>
+        <div id="model-panel"><h3>Runs on your device</h3><label>Browser model<select id="model-select"></select></label><button type="button" id="download-model" class="button secondary">Download model</button><button type="button" id="stop-download" hidden>Stop download</button><progress id="model-progress" max="1" value="0" hidden></progress><p id="model-status" role="status"></p><p class="detail">First download needs storage and a compatible WebGPU graphics device. Model files come from public hosts; your prompts stay on this device.</p></div>
+        <div class="study-columns"><section><h3>Class materials</h3><label>Add textbook or syllabus<input id="materials" type="file" multiple accept=".pdf,.txt,.md,.docx"></label><p class="detail">PDF, DOCX, TXT or Markdown, up to 25 MB per file. Scanned PDFs need OCR first.</p><ul id="documents"></ul><button type="button" id="backup">Export class backup</button><label class="detail">Import class backup<input id="restore" type="file" accept=".json"></label><button type="button" id="delete-class">Delete this class</button></section>
+        <section><h3>Ask about your materials</h3><div id="conversation" aria-live="polite"></div><form id="question-form"><label>Your question<textarea id="question" required maxlength="2000" rows="3" placeholder="How is the final grade calculated?"></textarea></label><button id="ask" class="button primary">Ask Coursekin</button><button type="button" id="stop-answer" hidden>Stop answer</button></form><p id="task-status" role="status"></p><p id="study-error" role="alert"></p></section></div>
+      </section>
+    </section>
+    <section class="workflow" aria-labelledby="workflow-title">
+      <div class="section-heading"><p class="eyebrow">LESS SETUP. MORE STUDYING.</p><h2 id="workflow-title">From course files to <em>clearer thinking.</em></h2></div>
+      <ol class="steps">
+        <li><span class="step-index">1</span><h3>Name your class</h3><p>Biology 101. World history. Whatever you are working on.</p></li>
+        <li><span class="step-index">2</span><h3>Add your materials</h3><p>Upload your textbook and syllabus in the study space above.</p></li>
+        <li><span class="step-index">3</span><h3>Start asking questions</h3><p>Work through an idea, practice a problem or check your understanding.</p></li>
+      </ol>
+    </section>
+    <section class="look" aria-labelledby="look-title">
+      <div class="look-copy"><p class="eyebrow">A PLACE TO GET UNSTUCK</p><h2 id="look-title">Your materials.<br><em>Within reach.</em></h2><p>Coursekin keeps the class, source materials and conversation together on your device.</p><p class="caption">Earlier desktop edition pictured. The browser study space above needs no API key.</p></div>
+      <figure><img src="coursekin-desktop.png" alt="Coursekin local app showing the class setup and textbook and syllabus upload areas" width="1440" height="1000" loading="lazy"><figcaption>The Coursekin local app</figcaption></figure>
+    </section>
+    <section class="notes" aria-label="Good to know">
+      <div><h3>Your files belong with you.</h3><p>This browser edition stores extracted text and conversations in this browser. Files are read locally and are not uploaded to a server. Public hosts provide model and document-reader assets. Source citations point to your uploaded documents, not external verification.</p></div>
+      <div><h3>Made to help you learn.</h3><p>Ask for hints, explanations and practice. Check answers against your course materials and follow your class rules for using AI.</p></div>
+    </section>
+  </main><script type="module" src="app.mjs"></script>
+  <footer><a class="brand" href="/">coursekin<span class="brand-dot">.</span></a><p>Open source. MIT licensed.</p><nav aria-label="Footer"><a href="https://github.com/agammann/coursekin/blob/main/PRIVACY.md">Privacy</a><a href="https://github.com/agammann/coursekin/blob/main/TERMS.md">Terms</a><a href="https://github.com/agammann/coursekin">Source code</a></nav></footer>
+</body>
+</html>

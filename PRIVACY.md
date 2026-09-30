@@ -6,7 +6,7 @@ Coursekin is published by Alexander Gregory Ammann. This notice covers the Cours
 
 ## Public website
 
-The public entry website at [coursekin.alx21.chatgpt.site](https://coursekin.alx21.chatgpt.site) is hosted by OpenAI Sites. It contains links to the plugin and local download, with no Coursekin upload form, API key field, chat service or analytics script. Hosting infrastructure may process request information under its own policies. Following an external link takes you to that service and its privacy practices.
+The [browser website](https://coursekin.alx21.chatgpt.site) reads uploaded files locally and stores extracted text, class names and conversations in IndexedDB on this device. It sends no course materials or prompts to a model service. Public hosts supply pinned document-reader code, model runtime files and weights. Hosting and asset hosts may process ordinary request metadata. Exported class backups contain extracted materials and conversations. Delete documents or classes in the interface; browser data deletion is not secure erasure of disk sectors or exported copies. Clearing browser storage can remove all classes and cached models. Answers are drafts with source references, not guarantees of accuracy.
 
 ## Local app
 
