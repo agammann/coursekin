@@ -252,7 +252,7 @@ class Handler(BaseHTTPRequestHandler):
             if method == 'GET':
                 public = {'/': 'index.html', '/app.js': 'app.js', '/style.css': 'style.css', '/favicon.svg': 'favicon.svg'}
                 if path in public:
-                    file = ROOT / 'web' / public[path]
+                    file = ROOT / 'local-web' / public[path]
                     return self.send(200, file.read_bytes(), mimetypes.guess_type(file.name)[0] or 'application/octet-stream')
             raise BadRequest('Not found.', 404)
         except BadRequest as exc:

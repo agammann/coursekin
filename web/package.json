@@ -1,0 +1,12 @@
+{
+  "name": "coursekin-browser",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "build": "node build.mjs",
+    "preview": "wrangler dev --config wrangler.jsonc --local --ip 127.0.0.1 --port 5177 --inspector-port 0"
+  },
+  "devDependencies": { "esbuild": "0.28.1", "wrangler": "4.146.0" }
+}

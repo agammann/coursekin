@@ -11,7 +11,7 @@ git clone https://github.com/agammann/coursekin.git
 cd coursekin
 ```
 
-No Node build, database server or frontend package installation is required. The application uses Python, SQLite and plain HTML, CSS and JavaScript.
+The Python local app needs no Node build, database server or frontend package installation. It uses Python, SQLite and plain HTML, CSS and JavaScript. The separate browser edition's hosted route has a Node build and Worker preview; follow [its development guide](../web/README.md#development-and-preview).
 
 ## Run checks
 
@@ -31,7 +31,7 @@ On macOS or Linux:
 
 Tests use temporary databases and controlled responders; they do not require a real API key or make paid model requests. CI runs tests and packaging on all three platforms. See the [verification record](verification.md) for the limits of those checks.
 
-If you change browser JavaScript and have Node.js installed, run `node --check web/app.js`, then exercise the changed flow in the local app. A syntax check alone does not verify the interface.
+If you change the local app JavaScript and have Node.js installed, run `node --check local-web/app.js`, then exercise the changed flow in the local app. A syntax check alone does not verify the interface.
 
 ## Configuration
 
@@ -64,20 +64,21 @@ To start without opening a browser, substitute `-m coursekin.server` for `launch
 | Path | Purpose |
 | :--- | :--- |
 | `coursekin/` | HTTP service, document reader, resource limits, storage and model requests |
-| `web/` | Local app interface and assets |
+| `local-web/` | Python local app interface and assets |
+| `web/` | Separate public browser edition |
 | `plugins/coursekin/` | Manifests, icon and tutoring skill |
 | `tests/` | Automated behavior and security boundary checks |
 | `docs/` | Guides, research, screenshots and verification records |
 | `.github/workflows/checks.yml` | Windows, Ubuntu and macOS CI |
 | `data/`, `.env.local`, `.venv/`, `dist/` | Private or generated files excluded from Git |
 
-The public [Coursekin website](https://coursekin.alx21.chatgpt.site) is a separate OpenAI Sites deployment linking to the two editions. Running this repository starts the local study app.
+The public [Coursekin website](https://coursekin.alx21.chatgpt.site) uses the separate browser edition in `web/`. The Python server serves `local-web/` and its own API. Keep the two entry points separate: the local app uses its configured hosted provider, while the browser edition has its own runtime and storage.
 
 ## Package a release
 
 Run `package_release.py` with the virtual environment's Python. It builds `dist/coursekin-local-source.zip` and `dist/coursekin-plugin.zip` from explicitly allowed paths, scans for secret patterns and the locally configured key, and verifies ZIP integrity. It does not upload anything.
 
-The source archive contains a top level `coursekin` folder. The plugin archive contains its files at the root. Private configuration, databases, virtual environments and generated output are excluded. Inspect the result before sharing it; do not ZIP the whole working folder.
+The source archive contains a top level `coursekin` folder. The plugin archive contains its files at the root. Private configuration, databases, virtual environments, nested Node dependencies, worker state and generated output are excluded. Browser `.mjs` source, package manifests, lockfiles and hosting identity are included; build the browser edition separately using its own guide. Inspect the result before sharing it; do not ZIP the whole working folder.
 
 Versioned release assets are snapshots. Documentation on `main` can be newer than the bundled documents. A later software release should have its own version, release notes and verification record.
 

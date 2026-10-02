@@ -8,9 +8,9 @@ Coursekin helps you understand course material, practice a problem and check wha
 
 ## Run directly in your browser
 
-The [Coursekin website](https://coursekin.alx21.chatgpt.site) now includes the study workspace. Create a class, add PDF/DOCX/TXT/Markdown materials and ask questions with source references. No account, API key or paid AI API is needed. Files, extracted text and conversations stay in this browser's local storage; export a class backup to keep them safe.
+The [Coursekin website](https://coursekin.alx21.chatgpt.site) includes the study workspace. Create a class, add PDF/DOCX/TXT/Markdown materials and ask questions with source references. Device mode needs no account, API key or paid AI service. Optional hosted answers use your own OpenAI API key, with GPT-5.4 as the hosted default and usage billed to your account. Classes, extracted text and conversations are saved in this browser; export a class backup to keep them safe.
 
-The first generation downloads a browser model from public hosts. WebGPU, compatible graphics hardware and sufficient storage/memory are required. Answers run on the visitor's device and can be wrong; inspect the cited excerpts. See [the browser edition guide](web/README.md) for limits, source layout and local preview.
+Device mode downloads the experimental Qwen 3 4B model from public hosts and requires WebGPU, compatible graphics hardware and sufficient storage/memory. Hosted mode sends the question, selected source excerpts and recent conversation through Coursekin to OpenAI. Its key stays in tab memory and clears on reload or switching to device mode. Both modes can be wrong; inspect the cited excerpts and reasoning. See [the browser edition guide](web/README.md) for limits, privacy and local preview.
 
 ## Earlier editions
 
@@ -53,7 +53,7 @@ The launcher installs dependencies on first use and opens the local address `htt
 
 ## Try a small practice class
 
-Use the fictional textbook and syllabus in [Try Coursekin](docs/try-coursekin.md). You can paste both into either edition before trying your own materials. The guide includes questions and expected source facts.
+Use the fictional textbook and syllabus in [Try Coursekin](docs/try-coursekin.md). Save the excerpts as TXT files to upload in the browser edition, or paste them in the local app or plugin. The guide includes questions and expected source facts.
 
 After setup, try asking:
 

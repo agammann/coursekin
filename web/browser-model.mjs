@@ -1,9 +1,7 @@
 // Inference runs in a dedicated worker. Remote requests download executable
 // model assets; prompts are sent only to this origin's local worker.
 export const MODELS = [
-  { id: 'Qwen3-1.7B-q4f16_1-MLC', label: 'Standard · Qwen 3 1.7B' },
-  { id: 'Qwen3-4B-q4f16_1-MLC', label: 'Larger · Qwen 3 4B' },
-  { id: 'Llama-3.2-1B-Instruct-q4f16_1-MLC', label: 'Smaller · Llama 3.2 1B' },
+  { id: 'Qwen3-4B-q4f16_1-MLC', label: 'Experimental · Qwen 3 4B' },
 ];
 let selected = MODELS[0].id;
 let engine, worker, loading, loadController, active = false;
@@ -21,7 +19,7 @@ export function selectModel(id) {
   worker?.terminate(); engine = worker = undefined; selected = id;
   publish({ phase: 'idle', model: id, progress: 0, text: 'Download a model once. Generation runs on your device.' });
 }
-export function unloadModel(){if(active||loading)throw Error('Stop the text task before loading the image model.');worker?.terminate();worker=engine=undefined;publish({phase:'idle',progress:0,text:'Text model unloaded to free graphics memory. Reload it to write more text.'});}
+export function unloadModel(){if(active||loading)throw Error('Stop the current task before unloading the model.');worker?.terminate();worker=engine=undefined;publish({phase:'idle',progress:0,text:'Model unloaded to free graphics memory. Download it again when needed.'});}
 export function stopDownload() { loadController?.abort(); }
 function aborted(signal) {
   signal?.throwIfAborted();
@@ -70,7 +68,7 @@ export async function loadModel({ signal } = {}) {
       return engine;
     })().catch(error => {
       worker?.terminate(); worker = engine = undefined;
-      publish({ phase: error.name === 'AbortError' ? 'idle' : 'error', progress: 0, text: error.name === 'AbortError' ? 'Download stopped. You can try again.' : error.message || 'The model could not load. Try the smaller model or another device.' });
+      publish({ phase: error.name === 'AbortError' ? 'idle' : 'error', progress: 0, text: error.name === 'AbortError' ? 'Download stopped. You can try again.' : error.message || 'The model could not load. Try another compatible device or choose hosted answers with your own key.' });
       throw error;
     }).finally(() => { loading = undefined; loadController = undefined; });
   }
@@ -92,7 +90,11 @@ export async function generate(messages, { schema, maxTokens = 1600, signal } = 
       stream: false,
       ...(schema ? { response_format: { type: 'json_object', schema: JSON.stringify(schema) } } : {}),
       extra_body: { enable_thinking: false },
-    }), generationSignal, () => local.interruptGenerate());
+    }), generationSignal, () => {
+      local.interruptGenerate();
+      worker?.terminate(); worker = engine = undefined;
+      publish({ phase: 'idle', progress: 0, text: 'Answer stopped. Ask again to reload the cached model.' });
+    });
     aborted(signal);
     const choice = response.choices?.[0];
     if (!choice?.message?.content) throw Error('The model returned no result. Try a shorter input.');

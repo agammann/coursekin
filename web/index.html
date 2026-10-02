@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Coursekin · Study your class materials</title>
-  <meta name="description" content="Name your class, add your textbook and syllabus, and start asking questions. Study directly in your browser with no paid AI API.">
+  <meta name="description" content="Name your class, add your textbook and syllabus, and ask source-linked questions. Choose device analysis or OpenAI with your own key.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -21,9 +21,11 @@
         <p class="lead">Name your class. Add your textbook and syllabus. Ask the questions that get you unstuck.</p>
       </div>
       <section class="study" aria-label="Your study space">
-        <div class="section-heading"><h2>Your study space</h2><p>Files, conversations and model inference stay on this device. Export a backup before clearing browser data.</p></div>
+        <div class="section-heading"><h2>Your study space</h2><p>Materials and conversations are saved on this device. Choose where answers are generated, and export a backup before clearing browser data.</p></div>
         <div class="class-actions"><label>Class<select id="class-select" aria-label="Choose class"></select></label><form id="class-form"><label>New class name<input id="class-name" maxlength="100" required placeholder="Biology 101"></label><button class="button secondary">Add class</button></form></div>
-        <div id="model-panel"><h3>Runs on your device</h3><label>Browser model<select id="model-select"></select></label><button type="button" id="download-model" class="button secondary">Download model</button><button type="button" id="stop-download" hidden>Stop download</button><progress id="model-progress" max="1" value="0" hidden></progress><p id="model-status" role="status"></p><p class="detail">First download needs storage and a compatible WebGPU graphics device. Model files come from public hosts; your prompts stay on this device.</p></div>
+        <fieldset id="answer-options"><legend>Where to generate answers</legend><label><input type="radio" name="answer-mode" value="device" checked>On this device</label><label><input type="radio" name="answer-mode" value="hosted">OpenAI with your key</label><p class="detail">Device models are experimental and can make basic reasoning errors. Hosted answers use your own API billing account. Every answer still needs source review.</p></fieldset>
+        <div id="model-panel"><h3>Runs on your device</h3><label>Browser model<select id="model-select"></select></label><button type="button" id="download-model" class="button secondary">Download model</button><button type="button" id="stop-download" hidden>Stop download</button><progress id="model-progress" max="1" value="0" hidden></progress><p id="model-status" role="status"></p><p class="detail">First download needs storage and a compatible WebGPU graphics device. Model files come from public hosts; your prompts stay on this device. Coursekin never switches to paid answers automatically.</p></div>
+        <div id="hosted-panel" hidden><h3>Use your own OpenAI account</h3><label>Hosted model<select id="hosted-model"><option value="gpt-5.4">GPT-5.4</option><option value="gpt-5.4-mini">GPT-5.4 mini</option></select></label><label>Your OpenAI API key<input id="hosted-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-…"></label><button id="clear-key" type="button">Clear key</button><p class="detail">Your question, up to six selected excerpts and the last four conversation messages pass through Coursekin to OpenAI. Usage is billed to your API account. The key stays in tab memory and clears on reload or switching to device mode; it is excluded from class backups. Requests use store: false; OpenAI's data policies still apply.</p></div>
         <div class="study-columns"><section><h3>Class materials</h3><label>Add textbook or syllabus<input id="materials" type="file" multiple accept=".pdf,.txt,.md,.docx"></label><p class="detail">PDF, DOCX, TXT or Markdown, up to 25 MB per file. Scanned PDFs need OCR first.</p><ul id="documents"></ul><button type="button" id="backup">Export class backup</button><label class="detail">Import class backup<input id="restore" type="file" accept=".json"></label><button type="button" id="delete-class">Delete this class</button></section>
         <section><h3>Ask about your materials</h3><div id="conversation" aria-live="polite"></div><form id="question-form"><label>Your question<textarea id="question" required maxlength="2000" rows="3" placeholder="How is the final grade calculated?"></textarea></label><button id="ask" class="button primary">Ask Coursekin</button><button type="button" id="stop-answer" hidden>Stop answer</button></form><p id="task-status" role="status"></p><p id="study-error" role="alert"></p></section></div>
       </section>
@@ -37,11 +39,11 @@
       </ol>
     </section>
     <section class="look" aria-labelledby="look-title">
-      <div class="look-copy"><p class="eyebrow">A PLACE TO GET UNSTUCK</p><h2 id="look-title">Your materials.<br><em>Within reach.</em></h2><p>Coursekin keeps the class, source materials and conversation together on your device.</p><p class="caption">Earlier desktop edition pictured. The browser study space above needs no API key.</p></div>
+      <div class="look-copy"><p class="eyebrow">A PLACE TO GET UNSTUCK</p><h2 id="look-title">Your materials.<br><em>Within reach.</em></h2><p>Coursekin keeps the class, source materials and conversation together on your device.</p><p class="caption">Earlier desktop edition pictured. Device answers in the browser study space need no API key.</p></div>
       <figure><img src="coursekin-desktop.png" alt="Coursekin local app showing the class setup and textbook and syllabus upload areas" width="1440" height="1000" loading="lazy"><figcaption>The Coursekin local app</figcaption></figure>
     </section>
     <section class="notes" aria-label="Good to know">
-      <div><h3>Your files belong with you.</h3><p>This browser edition stores extracted text and conversations in this browser. Files are read locally and are not uploaded to a server. Public hosts provide model and document-reader assets. Source citations point to your uploaded documents, not external verification.</p></div>
+      <div><h3>Your files belong with you.</h3><p>This browser edition stores extracted text and conversations in this browser. Files are read locally. Device answers stay on your computer; optional hosted answers send selected excerpts, your question and recent conversation to OpenAI through Coursekin. Public hosts provide model and document-reader assets. Source citations point to your uploaded documents, not external verification.</p></div>
       <div><h3>Made to help you learn.</h3><p>Ask for hints, explanations and practice. Check answers against your course materials and follow your class rules for using AI.</p></div>
     </section>
   </main><script type="module" src="app.mjs"></script>
