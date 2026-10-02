@@ -29,6 +29,7 @@ test('invalid credentials, origins, model and source bounds never reach a provid
     assert((await visitorAnswer(req, { fetchImpl: unexpected })).status >= 400);
   }
   assert.throws(() => validateQuestion({ ...question, excerpts: [{ ...question.excerpts[0], id: 1 }] }));
+  assert.deepEqual(validateQuestion({ ...question, excerpts: [{ ...question.excerpts[0], score: 6.6029677386274175 }] }), question);
 });
 test('provider redirects and errors are returned safely without a second request', async () => {
   for (const status of [302, 401, 403, 429, 500]) {

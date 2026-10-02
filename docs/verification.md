@@ -24,6 +24,10 @@ The browser edition now offers an explicit choice between on-device inference an
 
 Automated browser tests cover backup validation and retrieval, bounded provider requests, same-origin access, unknown source identifiers, credential exclusion, safe provider errors, rejected redirects and cancellation of a stalled request upload. Their provider responses are synthetic; they verify handling, not model quality. Source markers use `[source:1]` so ordinary mathematical brackets such as `[0, 1]` are not mistaken for citations.
 
+A further device run exposed an output-format failure: Qwen 4B calculated the correct grade, then generated thousands of spaces before completing its JSON and reached the existing token limit. The device prompt now explicitly requests one compact object containing both required fields; internal retrieval scores are also excluded from the model input. With the same model, sampling and token limit, the controlled 78-percent question and the 73-percent cancellation/retry question both completed correctly in 94 output tokens each. This fixes the observed format failure without treating a passing example as general model reliability.
+
+The published hosted edition also completed a real GPT-5.4 check combining the 78-percent calculation with a closed interval `[0, 1]`. Both source references matched the uploaded materials. Key clearing, backup exclusion and layouts at widths 1440, 390 and 320 passed on the published site. A separate fixture check verified that bold emphasis renders safely while HTML remains literal text and exported answer text is preserved.
+
 Scanned PDF OCR, very large materials near every resource limit, all hardware/browser combinations, broad accessibility coverage and adversarial tutoring quality remain outside this pass. Citation checks cannot prove that a claim is supported or that a calculation is correct. Earlier plugin checks below remain historical.
 
 ## September 19 real usage checks

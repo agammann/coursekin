@@ -98,7 +98,7 @@ export async function generate(messages, { schema, maxTokens = 1600, signal } = 
     aborted(signal);
     const choice = response.choices?.[0];
     if (!choice?.message?.content) throw Error('The model returned no result. Try a shorter input.');
-    if (choice.finish_reason === 'length') throw Error('The result reached its length limit. Shorten the input and try again.');
+    if (choice.finish_reason === 'length') throw Error('The experimental browser model did not finish this answer. Try a narrower question or choose OpenAI with your own key. Your conversation is unchanged.');
     const text = choice.message.content.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
     return { text, value: schema ? JSON.parse(text) : text, model: state.model, usage: response.usage };
   } catch (error) {
