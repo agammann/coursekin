@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Coursekin · Your class, ready when you are</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body>
+<aside class="sidebar">
+  <a class="brand" href="/" aria-label="Coursekin home">Coursekin<span class="brand-dot">.</span></a>
+  <button id="new-class" class="primary new-class"><span aria-hidden="true">＋</span> New class</button>
+  <p class="nav-label">Your classes</p>
+  <nav id="classes" aria-label="Your classes"></nav>
+  <div class="sidebar-bottom"><button id="settings-button" class="quiet"><span aria-hidden="true">⚙</span> Settings</button></div>
+</aside>
+<main id="main">
+  <section id="setup" class="setup">
+    <header class="intro"><h1>A little context.<br>A lot of <em>clarity.</em></h1><p>Name your class, add your books, and ask away.</p></header>
+    <form id="class-form">
+      <label class="field-label" for="class-name">Class name</label>
+      <input id="class-name" name="name" placeholder="e.g. Biology 101" maxlength="100" required autocomplete="off">
+      <div id="setup-documents" class="document-grid"></div>
+      <p class="privacy-note">Your files stay on this computer. Relevant passages are sent to OpenAI when you ask a question.</p>
+      <button id="create-class" class="primary wide" type="submit">Start asking questions <span aria-hidden="true">→</span></button>
+      <p class="footnote" id="import-status" role="status">Your class, ready when you are.</p>
+    </form>
+  </section>
+  <section id="chat" class="chat hidden" aria-label="Class chat">
+    <header class="chat-header"><div><p class="nav-label">Your study space</p><h1 id="chat-title"></h1></div><button id="materials-button" class="secondary">Course materials</button></header>
+    <div id="messages" class="messages" aria-live="polite"></div>
+    <div id="chat-welcome" class="chat-welcome"><div class="book-mark" aria-hidden="true">✳</div><h2>Let’s make it click.</h2><p>Your textbook and syllabus are ready.<br>Ask a question, work through an idea, or check your reasoning.</p><div class="suggestions"><button type="button">What will we cover in this class?</button><button type="button">Help me understand the first topic.</button><button type="button">What does the syllabus say about grading?</button></div></div>
+    <form id="question-form" class="composer"><label class="sr-only" for="question">Ask about your class</label><textarea id="question" rows="2" maxlength="6000" placeholder="Ask about your class…" required></textarea><button id="send" class="primary" type="submit" aria-label="Send question">↑</button><p id="answer-status" role="status">Grounded in your materials. Check source references for important details.</p></form>
+  </section>
+</main>
+<div id="toast" role="alert" class="toast hidden"></div>
+<dialog id="settings-dialog"><form method="dialog"><button class="close" aria-label="Close settings">×</button></form><h2>A space of your own.</h2><p>Coursekin stores extracted course text and chat history on this computer. It sends your question, recent conversation and selected passages to OpenAI to generate an answer.</p><div class="setting-row"><span>OpenAI connection</span><strong id="connection-status"></strong></div><div class="setting-row"><span>Model</span><strong id="model-name"></strong></div><p id="key-help" class="muted">Keys stay in the server environment. To connect or replace your own key, stop the app and run <code>python setup_key.py</code>, then start it again.</p><p class="muted">This app runs locally and uses an online model. Scanned PDFs need OCR first. Text extraction can miss diagrams and complex equations.</p><p class="muted">The ChatGPT plugin uses ChatGPT’s own attachments and storage. Classes are not automatically synced between the two versions.</p></dialog>
+<dialog id="materials-dialog"><form method="dialog"><button class="close" aria-label="Close materials">×</button></form><h2>Course materials</h2><p class="muted">The context behind your conversations.</p><div id="material-list"></div><details class="add-materials"><summary>Add more material</summary><form id="add-form"><div id="add-documents" class="document-grid"></div><button id="add-submit" class="primary wide">Add to this class</button><p id="add-status" class="muted" role="status"></p></form></details><div class="dialog-actions"><button id="export" class="secondary">Export class</button><button id="delete" class="danger">Delete class</button></div><p class="muted fine">Exports include your course text and conversation. Keep them private.</p></dialog>
+<dialog id="source-dialog"><form method="dialog"><button class="close" aria-label="Close source">×</button></form><p class="nav-label">From your materials</p><h2 id="source-title"></h2><p id="source-location" class="muted"></p><blockquote id="source-text"></blockquote><p class="muted fine">This is an extracted passage. PDF page numbers refer to the file’s page order.</p></dialog>
+<dialog id="delete-dialog"><h2>Delete this class?</h2><p>This removes the saved text and conversation from Coursekin. Your original files are unchanged. Export first if you want a copy.</p><div class="dialog-actions"><button id="cancel-delete" class="secondary">Keep class</button><button id="confirm-delete" class="danger">Delete this class</button></div></dialog>
+</body></html>

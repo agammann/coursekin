@@ -1,27 +1,37 @@
 """Build shareable archives from an explicit file allowlist, never the working tree."""
 import json
+import os
 import re
 import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 TOP_FILES = {'README.md', 'SECURITY.md', 'PRIVACY.md', 'TERMS.md', 'LICENSE', 'requirements.txt', '.gitignore', '.gitattributes', 'bootstrap.py', 'setup_key.py', 'launch.py', 'Start Coursekin.cmd', 'start.sh', 'package_release.py'}
-DIRECTORIES = {'coursekin', 'web', 'plugins', 'tests', 'docs', '.github'}
-EXTENSIONS = {'.py', '.html', '.css', '.js', '.svg', '.md', '.json', '.png', '.jpg', '.yml', '.yaml', '.txt'}
+DIRECTORIES = {'coursekin', 'local-web', 'web', 'plugins', 'tests', 'docs', '.github'}
+EXTENSIONS = {'.py', '.html', '.css', '.js', '.mjs', '.jsonc', '.svg', '.md', '.json', '.png', '.jpg', '.yml', '.yaml', '.txt'}
+
+EXCLUDED_DIRECTORIES = {'__pycache__', 'data', '.git', '.venv', 'node_modules', 'dist', 'build', '.wrangler'}
+
+
+def private_name(name):
+    return name.startswith(('.env', '.dev.vars'))
+
 
 def files():
-    for file in ROOT.rglob('*'):
-        if not file.is_file():
-            continue
-        path = file.relative_to(ROOT)
-        if '__pycache__' in path.parts:
-            continue
-        if (len(path.parts) == 1 and file.name in TOP_FILES) or (len(path.parts) > 1 and path.parts[0] in DIRECTORIES and (file.suffix in EXTENSIONS or file.name == 'LICENSE')):
-            if file.is_symlink() or not file.resolve().is_relative_to(ROOT):
-                raise ValueError('A linked file cannot be packaged: ' + path.as_posix())
-            if any(part.startswith('.env') or part in {'data', '.git', '.venv', 'node_modules'} for part in path.parts):
-                raise ValueError('Private path found: ' + path.as_posix())
-            yield file, path
+    for directory, folders, names in os.walk(ROOT, followlinks=False):
+        # Never enter private state or generated dependencies, at any depth.
+        folders[:] = [name for name in folders if name not in EXCLUDED_DIRECTORIES and not private_name(name)]
+        for name in names:
+            if private_name(name):
+                continue
+            file = Path(directory) / name
+            path = file.relative_to(ROOT)
+            if (len(path.parts) == 1 and name in TOP_FILES) or (len(path.parts) > 1 and path.parts[0] in DIRECTORIES and (file.suffix in EXTENSIONS or name == 'LICENSE')):
+                if file.is_symlink() or not file.resolve().is_relative_to(ROOT):
+                    raise ValueError('A linked file cannot be packaged: ' + path.as_posix())
+                if file.is_file():
+                    yield file, path
+
 
 def check(data, label, key=None):
     if re.search(rb'sk-(?:proj-)?[A-Za-z0-9_-]{20,}', data) or (b'-----BEGIN' + b' PRIVATE KEY-----') in data or (key and key in data):

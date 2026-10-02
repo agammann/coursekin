@@ -1,29 +1,60 @@
 # Coursekin browser edition
 
-[Study with Coursekin](https://coursekin.alx21.chatgpt.site). Create a class, add course materials and ask questions grounded in relevant source excerpts. No paid AI API, account or API key is needed.
+[Study with Coursekin](https://coursekin.alx21.chatgpt.site). Create a class, add course materials and ask questions with source excerpts you can inspect.
 
-The first run downloads model files from public hosts. Text generation runs in a dedicated browser worker using WebLLM; prompts are not sent to a hosted model. The default is Qwen 3 1.7B, with larger Qwen 3 4B and smaller Llama 3.2 1B choices. Model downloads are cached when browser storage permits.
+## Choose where answers run
 
-Use HTTPS (or localhost) and a current browser with WebGPU and compatible graphics hardware. A model choice does not guarantee that every device has enough memory. Download speed, inference speed and answer quality depend on the device and model. Stop a download or generation from the interface; errors preserve existing inputs. There is no paid model fallback. Hosting and model-download bandwidth remain separate from AI API fees.
+**On this device** uses the experimental Qwen 3 4B browser model. It needs no account, API key or paid model service. The first use downloads model assets from public hosts. Use HTTPS or localhost, a WebGPU browser, compatible graphics hardware and sufficient memory/storage. Downloads are cached when browser storage permits. Stop cancels generation; the next question reloads the cached model.
+
+**OpenAI with your key** uses your own OpenAI API account and billing, with GPT-5.4 as the default and GPT-5.4 mini as an option. Enter a key in the masked field, then ask a question. There is no publisher-funded key or automatic switch to a paid service. The key stays in tab memory; **Clear key**, switching to device mode, leaving the page or reloading clears it. Backups exclude it.
+
+For hosted answers, your question, up to six selected source excerpts with filenames/page numbers and the last four conversation messages pass through the Coursekin server to OpenAI. Original file binaries are not uploaded. Requests use `store: false`; provider data policies still apply. Citation checks validate source identifiers, not whether every claim is supported or the reasoning is correct. Review the answer and open its sources in either mode.
+
+The smaller browser models were removed after a real Qwen 1.7B test added three scores and returned 240% for a weighted-grade question whose answer was 78%. Qwen 4B gave the correct calculation on that example; this does not establish general reliability or support on other hardware.
 
 ## Study space
 
-Classes, extracted text and conversation are stored in IndexedDB on this device. Upload PDF, DOCX, TXT or Markdown, up to 25 MB per file, 600,000 extracted characters per document and 20 documents per class. PDFs are capped at 1,500 pages; scanned files require OCR first. Files are read in the browser and are not uploaded to a server.
+1. Name a class and add readable PDF, DOCX, TXT or Markdown materials.
+2. Choose a mode. Device mode downloads its model; hosted mode requires your own key.
+3. Ask a question using terms from your materials, then open the cited excerpts.
+4. Export a class backup before clearing browser data or changing devices.
 
-Coursekin ranks overlapping text chunks by question terms and supplies up to six relevant excerpts to the browser model. The answer must cite known excerpt IDs. Open each citation to read the actual passage and page. Citation validation checks identifiers, not whether every statement is entailed. No matching passages produces a visible request to narrow the question or add material.
+Each file may be up to 25 MB, with 600,000 extracted characters and at most 1,500 PDF pages. A class accepts up to 20 documents. Scanned PDFs need OCR first. Diagrams, tables and complex equations may not survive text extraction.
 
-Export a class backup to keep documents and conversation or move them to another device. Import creates a new class rather than overwriting an existing one. Browser data can be lost when cleared or evicted. Remove documents or delete a class from the study space.
+Classes, extracted text and conversations are saved in IndexedDB in this browser profile. Original uploaded binaries are not kept in backups. A backup import creates a new class instead of replacing existing work. Keep backups private; they are not encrypted. Browser storage cleanup or eviction can remove classes. Classes do not sync between devices or with the Python app or plugin.
 
-## Local preview and hosting
+Retrieval ranks overlapping text chunks by question terms and supplies up to six excerpts. It supports Unicode and short terms such as pH, but keyword matching can still miss relevant passages or broader context. No matching passage produces a request to narrow the question or add material. An excerpt ID does not prove an answer is true.
 
-This source checkout is a static website. Serve `dist/` on localhost, for example `python -m http.server 8000 --directory dist`. No server model, environment variable or build dependency is required. `dist/app.mjs` handles class storage, extraction, retrieval and local generation. Document readers and model assets use pinned public CDN URLs. `.openai/hosting.json` retains this site's identity.
+## Development and preview
 
-The separate earlier Python desktop application and host plugin are separate editions. This source implements the no-paid-API website; it does not claim those earlier editions have been converted or their packaged releases rebuilt.
+For **device-only** preview, run this from the repository root:
 
-## Privacy and limitations
+```sh
+python -m http.server 8000 --bind 127.0.0.1 --directory web
+```
 
-Materials, questions and responses stay on this device. Public model and reader asset hosts and the website host may receive ordinary request metadata. Answers can be wrong; check source excerpts and class rules. Lexical retrieval can miss relevant passages when wording differs. Browser inference requires compatible graphics hardware and sufficient memory.
+Open `http://127.0.0.1:8000`. A static server does not provide hosted answers.
+
+For the full browser app, use Node.js 22 or newer:
+
+```sh
+cd web
+npm ci
+npm test
+npm run build
+npm run preview
+```
+
+Open `http://127.0.0.1:5177`. The preview runs the built Cloudflare Worker, including `POST /api/answer/visitor`. Supply a visitor key through the browser field only; no server environment key is needed. From the repository root, `node --test tests/browser-data.test.mjs web/test/*.test.mjs` also covers backup validation and retrieval.
+
+`build.mjs` embeds an explicit browser-asset allowlist into `dist/server/index.js`. It excludes server source, configuration, environment files and dependencies from public asset routes. `.openai/hosting.json` identifies the existing Site. Preserve its project ID. The Python app serves `local-web/`; keep its entry point separate from this edition.
+
+## Verification and limits
+
+Deterministic tests cover source references, malformed backups, Unicode retrieval, request bounds, credential exclusion, provider errors, rejected redirects and cancellation of a stalled upload. Provider responses in those tests are synthetic; they do not measure answer quality. Real browser and provider observations are recorded in the repository's [verification guide](https://github.com/agammann/coursekin/blob/main/docs/verification.md).
+
+Use Coursekin to support your study process. Check source excerpts and follow your class rules. Model output can still omit facts, misunderstand a passage or make a calculation error.
 
 ## License
 
-Site code retains its existing licensing; model weights and third-party libraries retain their respective licenses.
+Coursekin code is MIT licensed. Model weights and third-party libraries retain their respective licenses.
