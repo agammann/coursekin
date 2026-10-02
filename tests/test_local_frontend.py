@@ -60,7 +60,7 @@ class LocalFrontend(unittest.TestCase):
 
     def test_built_archive_keeps_local_entry_point_and_assets(self):
         with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory) / 'source'
+            root = (Path(directory) / 'source').resolve()
             root.mkdir()
             # Stage only allowed source files; no private configuration is copied.
             for source, relative in package_release.files():
