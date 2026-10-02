@@ -1,7 +1,7 @@
 import { MODELS, subscribeModel, selectModel, loadModel, stopDownload, generate, unloadModel } from './browser-model.mjs';
 import { readBackup, retrieve } from './study-data.mjs';
 import { answerHosted } from './hosted-answer.mjs';
-import { tutorInstructions, answerSchema, validateAnswer } from './answer-contract.mjs';
+import { tutorInstructions, answerSchema, validateAnswer, validateQuestion } from './answer-contract.mjs';
 const $=id=>document.getElementById(id);
 let classes=[], selected='', task, busy=false, db, answerMode='device', modelPhase='idle';
 const current=()=>classes.find(c=>c.id===selected);
@@ -35,8 +35,8 @@ $('materials').addEventListener('change',async e=>{if(!current()||busy)return;se
 $('question-form').addEventListener('submit',async e=>{e.preventDefault();if(busy||!current())return;const submittedDraft=$('question').value,question=submittedDraft.trim();if(!question)return;const c=current(),sources=retrieve(c,question);setBusy(true);$('study-error').textContent='';task=new AbortController();try{
  if(!c.documents.length)throw Error('Add course materials first.');if(!sources.length)throw Error('No matching passages were found. Use terms from your materials or add the relevant source.');
  $('task-status').textContent=answerMode==='hosted'?'Reading selected passages with OpenAI…':'Reading relevant passages and answering on your device…';
- const input={question,recentConversation:c.messages.slice(-4).map(m=>({role:m.role,text:m.text})),excerpts:sources};
- const output=answerMode==='hosted'?await answerHosted(input,{apiKey:$('hosted-key').value,model:$('hosted-model').value,signal:task.signal}):await generate([{role:'system',content:tutorInstructions+' /no_think'},{role:'user',content:JSON.stringify(input)}],{schema:answerSchema(sources),maxTokens:1600,signal:task.signal});
+ const input=validateQuestion({question,recentConversation:c.messages.slice(-4).map(m=>({role:m.role,text:m.text})),excerpts:sources});
+ const output=answerMode==='hosted'?await answerHosted(input,{apiKey:$('hosted-key').value,model:$('hosted-model').value,signal:task.signal}):await generate([{role:'system',content:tutorInstructions+' Return exactly one compact JSON object with two fields: "answer" (a string) and "sourceIds" (an array of cited excerpt ID strings). Include both fields and no other text. /no_think'},{role:'user',content:JSON.stringify(input)}],{schema:answerSchema(sources),maxTokens:1600,signal:task.signal});
  task.signal.throwIfAborted();
  const {answer,sourceIds:ids}=validateAnswer(output.value,sources);
  c.messages.push({role:'user',text:question},{role:'assistant',text:answer,sources:sources.filter(s=>ids.includes(s.id))});await save();if($('question').value===submittedDraft)$('question').value='';render();$('task-status').textContent='Answer saved. Check the cited excerpts against your materials.';
