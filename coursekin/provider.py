@@ -1,12 +1,13 @@
 """Only this module sends model requests. The destination is fixed, not supplied by clients."""
 import json
 import os
+import re
 import urllib.request
 import urllib.error
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_MODEL = 'gpt-4.1-mini'
+DEFAULT_MODEL = 'gpt-5.4'
 
 def load_environment():
     env = ROOT / '.env.local'
@@ -32,7 +33,19 @@ def answer(question, passages, history, model=None):
     for m in history[-8:]:
         messages.append({'role': m['role'], 'content': m['text'][:2500]})
     messages.append({'role': 'user', 'content': question})
-    body = json.dumps({'model': model or os.environ.get('OPENAI_MODEL', DEFAULT_MODEL), 'input': messages, 'store': False, 'max_output_tokens': 1800}).encode()
+    selected = model or os.environ.get('OPENAI_MODEL', DEFAULT_MODEL)
+    numbers = [p['number'] for p in passages]
+    if not numbers:
+        raise ProviderError('No course passages are available. Add the relevant material first.')
+    schema = {'type': 'object', 'additionalProperties': False, 'required': ['answer', 'sourceNumbers'], 'properties': {
+        'answer': {'type': 'string', 'minLength': 1, 'maxLength': 12000},
+        'sourceNumbers': {'type': 'array', 'minItems': 1, 'maxItems': len(numbers), 'items': {'type': 'integer', 'enum': numbers}},
+    }}
+    payload = {'model': selected, 'input': messages, 'store': False, 'max_output_tokens': 12000,
+               'text': {'format': {'type': 'json_schema', 'name': 'coursekin_local_answer', 'strict': True, 'schema': schema}}}
+    if selected in ('gpt-5.4', 'gpt-5.4-mini'):
+        payload['reasoning'] = {'effort': 'medium'}
+    body = json.dumps(payload).encode()
     req = urllib.request.Request('https://api.openai.com/v1/responses', data=body, headers={'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key})
     try:
         with urllib.request.urlopen(req, timeout=75) as response:
@@ -44,8 +57,25 @@ def answer(question, passages, history, model=None):
     except Exception:
         raise ProviderError('Could not reach OpenAI. Check your connection and try again.') from None
     text = '\n'.join(part.get('text', '') for item in data.get('output', []) if item.get('type') == 'message' for part in item.get('content', []) if part.get('type') == 'output_text').strip()
-    if not text:
-        raise ProviderError('The model returned no answer. Try asking a shorter question.')
-    if data.get('status') == 'incomplete':
-        text += '\n\nThis answer reached its length limit. Ask a follow up to continue.'
-    return text
+    if data.get('status') != 'completed':
+        raise ProviderError('The answer did not finish. Your conversation is unchanged. Try a shorter question.')
+    return validate_answer(text, numbers, key)
+
+
+def validate_answer(text, numbers, key=''):
+    try:
+        value = json.loads(text)
+        answer, cited = value['answer'], value['sourceNumbers']
+        if not isinstance(answer, str) or not answer.strip() or len(answer) > 12000 or (key and key in answer):
+            raise ValueError()
+        if not isinstance(cited, list) or not 1 <= len(cited) <= len(numbers) or any(type(n) is not int or n not in numbers for n in cited):
+            raise ValueError()
+        cited = list(dict.fromkeys(cited))
+        inline = [int(n) for n in re.findall(r'\[(\d+)\]', answer)]
+        if any(n not in cited for n in inline):
+            raise ValueError()
+        if not inline:
+            answer += '\n\nSource excerpts: ' + ', '.join('[' + str(n) + ']' for n in cited)
+        return answer
+    except (ValueError, TypeError, KeyError):
+        raise ProviderError('The answer did not pass source-reference checks. Your conversation is unchanged. Try asking a narrower question.') from None

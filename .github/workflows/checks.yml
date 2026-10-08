@@ -1,13 +1,17 @@
-name: Coursekin checks
-on: [push, pull_request]
+name: Verify Coursekin
+on:
+  pull_request:
+  push:
+    branches: [main]
 permissions:
   contents: read
 jobs:
   browser:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: '22'
           cache: npm
@@ -16,15 +20,35 @@ jobs:
       - run: npm audit --prefix web --audit-level=low
       - run: node --test tests/browser-data.test.mjs web/test/*.test.mjs
       - run: npm run build --prefix web
-  test:
+      - run: python scripts/make-browser-fixtures.py
+      - run: npx --prefix web playwright install --with-deps chromium
+      - name: Verify compiled browser workflow and recovery
+        shell: bash
+        run: |
+          npm run preview --prefix web > /tmp/coursekin-preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" || true' EXIT
+          for attempt in {1..60}; do
+            if curl --silent --fail http://127.0.0.1:5177/ > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --silent --fail http://127.0.0.1:5177/ > /dev/null
+          npm run test:browser --prefix web
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        if: always()
+        with:
+          name: coursekin-browser-verification
+          path: web/outputs/
+  python:
     strategy:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: '3.12'
       - run: python -m pip install -r requirements.txt
@@ -32,7 +56,99 @@ jobs:
       - name: Verify clean launcher setup
         run: python -c "import bootstrap; bootstrap.prepare()"
       - run: python package_release.py
-      - uses: actions/upload-artifact@v4
+  source-release:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
-          name: coursekin-${{ matrix.os }}
-          path: dist/*.zip
+          node-version: '22'
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.12'
+      - name: Package and verify exact source and plugin ZIPs
+        run: |
+          python scripts/package-v1.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python scripts/unpack-v1.py --out ../coursekin-source-consumer
+          exit $LASTEXITCODE
+      - name: Verify Python from the fresh source ZIP
+        working-directory: ../coursekin-source-consumer
+        run: |
+          python -m pip install -r requirements.txt
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -c "import bootstrap; bootstrap.prepare()"
+          exit $LASTEXITCODE
+      - name: Verify browser from the fresh source ZIP
+        working-directory: ../coursekin-source-consumer
+        run: |
+          npm ci --prefix web
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          node --test tests/browser-data.test.mjs web/test/*.test.mjs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm run build --prefix web
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm audit --prefix web --audit-level=low
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python scripts/make-browser-fixtures.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npx --prefix web playwright install chromium
+          exit $LASTEXITCODE
+      - name: Exercise the packaged browser UI
+        working-directory: ../coursekin-source-consumer/web
+        run: |
+          $preview = Start-Process -FilePath (Get-Command node).Source -ArgumentList 'node_modules/wrangler/bin/wrangler.js dev --config wrangler.jsonc --local --ip 127.0.0.1 --port 5177 --inspector-port 0' -WindowStyle Hidden -PassThru -RedirectStandardOutput "$env:RUNNER_TEMP/coursekin-preview.log" -RedirectStandardError "$env:RUNNER_TEMP/coursekin-preview-error.log"
+          try {
+            $ready = $false
+            for ($attempt = 0; $attempt -lt 60; $attempt++) {
+              try { $response = Invoke-WebRequest -Uri 'http://127.0.0.1:5177/' -TimeoutSec 1; if ($response.StatusCode -eq 200) { $ready = $true; break } } catch { Start-Sleep -Seconds 1 }
+            }
+            if (-not $ready) { throw 'Packaged preview did not start.' }
+            npm run test:browser
+            exit $LASTEXITCODE
+          } finally {
+            if (-not $preview.HasExited) { taskkill /PID $preview.Id /T /F | Out-Null }
+          }
+      - name: Copy fresh consumer evidence into the checkout
+        if: always()
+        run: |
+          if (Test-Path -LiteralPath ../coursekin-source-consumer/web/outputs) {
+            New-Item -ItemType Directory -Path verification-artifacts -Force | Out-Null
+            Copy-Item -LiteralPath ../coursekin-source-consumer/web/outputs -Destination verification-artifacts/source-consumer -Recurse -Force
+          }
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        if: always()
+        with:
+          name: coursekin-source-consumer-verification
+          path: verification-artifacts/source-consumer/
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: coursekin-release
+          path: release-artifacts/
+          if-no-files-found: error
+  publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [browser, python, source-release]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: coursekin-release
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: coursekin-release
+          path: release-artifacts
+      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          script: |
+            const { default: publish } = await import(process.env.GITHUB_WORKSPACE + '/scripts/release.mjs');
+            await publish({ github, context, core });

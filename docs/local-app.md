@@ -58,7 +58,7 @@ If Linux reports that `venv` or `ensurepip` is unavailable, install the virtual 
 
 Create or manage your key in [OpenAI API keys](https://platform.openai.com/api-keys). Paste it only into the hidden terminal prompt from `setup_key.py`. Nothing appears as you type or paste; press Enter when finished.
 
-The script saves the key in `.env.local` in the app folder. That file is excluded from Git and packaged releases. It is a plaintext local secret, so keep it private. Do not paste it into a GitHub issue or the public Coursekin website.
+The script saves the key in `.env.local` in the app folder. That file is excluded from Git and packaged releases. It is a plaintext local secret, so keep it private. Do not paste it into a chat, issue or shared document. The browser edition has its own masked visitor-key field; entering a key there does not configure this Python app.
 
 The automatic launchers skip enrollment when `.env.local` already exists or `OPENAI_API_KEY` is set in the terminal environment. **Settings** shows whether a key is configured; a successful answer is the check that it can actually call the model.
 

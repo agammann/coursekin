@@ -1,0 +1,11 @@
+Biology 101 practice textbook
+Section 1: Photosynthesis
+
+Photosynthesis converts light energy into chemical energy. In plants,
+chloroplasts contain thylakoid membranes and a fluid called the stroma.
+The light dependent reactions take place in the thylakoid membranes.
+They use light and water and produce oxygen, ATP and NADPH.
+The Calvin cycle takes place in the stroma. It uses ATP and NADPH
+from the light dependent reactions to help fix carbon dioxide into sugars.
+
+This is original fictional material for trying Coursekin.

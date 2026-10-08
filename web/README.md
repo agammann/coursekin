@@ -10,7 +10,7 @@
 
 For hosted answers, your question, up to six selected source excerpts with filenames/page numbers and the last four conversation messages pass through the Coursekin server to OpenAI. Original file binaries are not uploaded. Requests use `store: false`; provider data policies still apply. Citation checks validate source identifiers, not whether every claim is supported or the reasoning is correct. Review the answer and open its sources in either mode.
 
-The smaller browser models were removed after a real Qwen 1.7B test added three scores and returned 240% for a weighted-grade question whose answer was 78%. Qwen 4B gave the correct calculation on that example; this does not establish general reliability or support on other hardware.
+The smaller models were removed after a real Qwen 1.7B test returned 240% for a weighted-grade question whose answer was 78%. Qwen 4B answered that earlier narrow example correctly, but its v1 multi-part check omitted the weighted total and clear source-conflict handling. Use short questions, check the calculation and review cited text. A passing example does not establish general reliability or support on other hardware.
 
 ## Study space
 
@@ -21,7 +21,7 @@ The smaller browser models were removed after a real Qwen 1.7B test added three 
 
 Each file may be up to 25 MB, with 600,000 extracted characters and at most 1,500 PDF pages. A class accepts up to 20 documents. Scanned PDFs need OCR first. Diagrams, tables and complex equations may not survive text extraction.
 
-Classes, extracted text and conversations are saved in IndexedDB in this browser profile. Original uploaded binaries are not kept in backups. A backup import creates a new class instead of replacing existing work. Keep backups private; they are not encrypted. Browser storage cleanup or eviction can remove classes. Classes do not sync between devices or with the Python app or plugin.
+Classes, extracted text and conversations are saved in IndexedDB in this browser profile. A failed save leaves the saved class and exported backup unchanged; export a backup and check browser storage settings before retrying. Original uploaded binaries are not kept in backups. A backup import creates a new class instead of replacing existing work. Keep backups private; they are not encrypted. Browser storage cleanup or eviction can remove classes. Classes do not sync between devices or with the Python app or plugin.
 
 Retrieval ranks overlapping text chunks by question terms and supplies up to six excerpts. It supports Unicode and short terms such as pH, but keyword matching can still miss relevant passages or broader context. No matching passage produces a request to narrow the question or add material. An excerpt ID does not prove an answer is true.
 

@@ -6,11 +6,11 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-TOP_FILES = {'README.md', 'SECURITY.md', 'PRIVACY.md', 'TERMS.md', 'LICENSE', 'requirements.txt', '.gitignore', '.gitattributes', 'bootstrap.py', 'setup_key.py', 'launch.py', 'Start Coursekin.cmd', 'start.sh', 'package_release.py'}
-DIRECTORIES = {'coursekin', 'local-web', 'web', 'plugins', 'tests', 'docs', '.github'}
+TOP_FILES = {'README.md', 'SECURITY.md', 'PRIVACY.md', 'TERMS.md', 'LICENSE', 'VERSION', 'STABILITY.md', 'CHANGELOG.md', 'THIRD_PARTY_NOTICES.md', 'requirements.txt', '.gitignore', '.gitattributes', 'bootstrap.py', 'setup_key.py', 'launch.py', 'Start Coursekin.cmd', 'start.sh', 'package_release.py'}
+DIRECTORIES = {'coursekin', 'local-web', 'web', 'plugins', 'tests', 'docs', 'examples', 'scripts', '.github'}
 EXTENSIONS = {'.py', '.html', '.css', '.js', '.mjs', '.jsonc', '.svg', '.md', '.json', '.png', '.jpg', '.yml', '.yaml', '.txt'}
 
-EXCLUDED_DIRECTORIES = {'__pycache__', 'data', '.git', '.venv', 'node_modules', 'dist', 'build', '.wrangler'}
+EXCLUDED_DIRECTORIES = {'__pycache__', 'data', '.git', '.venv', 'node_modules', 'dist', 'build', 'outputs', 'verification-artifacts', '.wrangler'}
 
 
 def private_name(name):
@@ -26,7 +26,7 @@ def files():
                 continue
             file = Path(directory) / name
             path = file.relative_to(ROOT)
-            if (len(path.parts) == 1 and name in TOP_FILES) or (len(path.parts) > 1 and path.parts[0] in DIRECTORIES and (file.suffix in EXTENSIONS or name == 'LICENSE')):
+            if (len(path.parts) == 1 and name in TOP_FILES) or (len(path.parts) > 1 and path.parts[0] in DIRECTORIES and (file.suffix in EXTENSIONS or name in {'LICENSE', '.gitignore'})):
                 if file.is_symlink() or not file.resolve().is_relative_to(ROOT):
                     raise ValueError('A linked file cannot be packaged: ' + path.as_posix())
                 if file.is_file():

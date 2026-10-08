@@ -1,0 +1,7 @@
+Biology 101 practice exam schedule
+
+Final exam: June 18, 2027.
+
+This fictional schedule deliberately conflicts with the June 11 date
+in practice-syllabus.md. Coursekin should report both dates and their
+sources rather than choose a date without clarification.

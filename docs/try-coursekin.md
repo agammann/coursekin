@@ -2,7 +2,9 @@
 
 [Back to Coursekin](../README.md)
 
-Use this fictional Biology 101 class before adding your own files. This is original sample material, not a real textbook or syllabus. Answers require a configured local API key or access through your plugin host.
+Use this fictional Biology 101 class before adding your own files. This is original sample material, not a real textbook or syllabus. Use the browser device model, your own hosted key, the configured Python app, or a compatible plugin host. The source release also includes ready-to-upload files in [examples/](../examples/).
+
+In the browser workspace, add a class and upload [biology-textbook.txt](../examples/biology-textbook.txt) and [practice-syllabus.md](../examples/practice-syllabus.md). Select an answer mode as described in the [browser guide](../web/README.md).
 
 ## Add the class
 
@@ -48,3 +50,9 @@ Select **Start asking questions** in the local app, or ask the plugin to confirm
 | “Quiz me on photosynthesis, one question at a time.” | A grounded practice question, followed by a pause for your attempt |
 
 Open a citation or source button in the local app to inspect its excerpt. In a plugin host, check the source location it provides. Wording varies; compare the facts and sources rather than expecting an exact answer.
+
+## Check calculations and conflicting sources
+
+With quizzes worth 20 percent, labs 40 percent and the final 40 percent, scores of 70, 80 and 80 give `70 × 0.20 + 80 × 0.40 + 80 × 0.40 = 78` percent. Ask Coursekin to show the three contributions: 14, 32 and 32.
+
+The uploaded practice syllabus lists June 11, 2027 for the final. Adding [exam-schedule.txt](../examples/exam-schedule.txt) introduces June 18, 2027. Ask which final date is confirmed. The sources conflict; the answer should give both dates and locations and request clarification instead of silently choosing. The pasted syllabus above omits the dates; use the linked files for this check.
