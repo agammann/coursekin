@@ -33,16 +33,18 @@ Tests use temporary databases and controlled responders; they do not require a r
 
 If you change the local app JavaScript and have Node.js installed, run `node --check local-web/app.js`, then exercise the changed flow in the local app. A syntax check alone does not verify the interface.
 
+For the browser interface regression, build and start its full preview, run `python scripts/make-browser-fixtures.py` from the repository root, then `npm run test:browser --prefix web`. Install the test browser with `npx --prefix web playwright install chromium` first. The harness exercises real document readers, IndexedDB, citations and recovery with synthetic hosted responses; it does not make paid requests or measure model quality.
+
 ## Configuration
 
 | Variable | Default | Where to set it |
 | :--- | :--- | :--- |
 | `OPENAI_API_KEY` | None | Private `setup_key.py` prompt or terminal environment |
-| `OPENAI_MODEL` | `gpt-4.1-mini` | Terminal environment or `.env.local` |
+| `OPENAI_MODEL` | `gpt-5.4` | Terminal environment or `.env.local` |
 | `COURSEKIN_PORT` | `8767` | Terminal environment |
 | `COURSEKIN_DATA_DIR` | `data` under the app folder | Terminal environment; prefer an absolute path |
 
-Only `OPENAI_API_KEY` and `OPENAI_MODEL` are loaded from `.env.local`. Existing environment values take precedence. Restart after changing configuration. The selected model must be available to your key and support the Responses API used by the provider.
+Only `OPENAI_API_KEY` and `OPENAI_MODEL` are loaded from `.env.local`. Existing environment values take precedence. Restart after changing configuration. The selected model must be available to your key and support Responses API structured output used by the provider.
 
 To use another local port on Windows PowerShell:
 
@@ -74,11 +76,13 @@ To start without opening a browser, substitute `-m coursekin.server` for `launch
 
 The public [Coursekin website](https://coursekin.alx21.chatgpt.site) uses the separate browser edition in `web/`. The Python server serves `local-web/` and its own API. Keep the two entry points separate: the local app uses its configured hosted provider, while the browser edition has its own runtime and storage.
 
-## Package a release
+## Package a release snapshot
 
 Run `package_release.py` with the virtual environment's Python. It builds `dist/coursekin-local-source.zip` and `dist/coursekin-plugin.zip` from explicitly allowed paths, scans for secret patterns and the locally configured key, and verifies ZIP integrity. It does not upload anything.
 
 The source archive contains a top level `coursekin` folder. The plugin archive contains its files at the root. Private configuration, databases, virtual environments, nested Node dependencies, worker state and generated output are excluded. Browser `.mjs` source, package manifests, lockfiles and hosting identity are included; build the browser edition separately using its own guide. Inspect the result before sharing it; do not ZIP the whole working folder.
+
+For the v1 release publisher, use a clean committed checkout and run `python scripts/package-v1.py`. This builds the two ZIPs from the exact Git commit, their individual SHA256 files and `SHA256SUMS` under `release-artifacts/`. Run `python scripts/unpack-v1.py --out ../coursekin-consumer` to verify every source byte and the six plugin files in a new folder outside the checkout. The main workflow publishes only after its checks pass; it verifies the current main commit and leaves an existing published version unchanged.
 
 Versioned release assets are snapshots. Documentation on `main` can be newer than the bundled documents. A later software release should have its own version, release notes and verification record.
 

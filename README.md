@@ -1,92 +1,72 @@
 # Coursekin
 
-Name your class. Add your textbook and syllabus. Start asking questions.
+Name your class. Add your textbook and syllabus. Ask questions with source passages you can open and check.
 
-Coursekin helps you understand course material, practice a problem and check what your syllabus says. Answers can include references to the material used, so you can check the source yourself.
+Coursekin helps you understand course material, practice a problem and check what your syllabus says. Its v1 source release includes three separate ways to study. Classes do not sync between them.
 
-**[Visit Coursekin](https://coursekin.alx21.chatgpt.site)** · [OpenAI plugin](https://chatgpt.com/plugins/plugins_6aaa22656ccc8191902ee998a70c8a86) · [Download](https://github.com/agammann/coursekin/releases/latest) · [Get help](https://github.com/agammann/coursekin/issues)
+**[Open the browser workspace](https://coursekin.alx21.chatgpt.site)** · [Download](https://github.com/agammann/coursekin/releases/latest) · [Get help](https://github.com/agammann/coursekin/issues)
 
-## Run directly in your browser
+| Edition | Start here | Where answers run | Where your class is kept |
+| :--- | :--- | :--- | :--- |
+| Browser workspace | [Open Coursekin](https://coursekin.alx21.chatgpt.site) | Experimental Qwen 3 4B on your device, or OpenAI with your own key | This browser profile; export/import class backups |
+| Python local app | Extract `coursekin-local-source.zip` | OpenAI with your own key; GPT-5.4 by default | SQLite on your computer; back up the stopped app's data folder |
+| Host plugin | [Plugin directory](https://chatgpt.com/plugins/plugins_6aaa22656ccc8191902ee998a70c8a86), or source bundle in a supported host | The host's model and file tools | The host's chat and attachment controls |
 
-The [Coursekin website](https://coursekin.alx21.chatgpt.site) includes the study workspace. Create a class, add PDF/DOCX/TXT/Markdown materials and ask questions with source references. Device mode needs no account, API key or paid AI service. Optional hosted answers use your own OpenAI API key, with GPT-5.4 as the hosted default and usage billed to your account. Classes, extracted text and conversations are saved in this browser; export a class backup to keep them safe.
+Hosted answers use your own API billing. Device mode needs no account, API key or paid service; it needs a compatible WebGPU browser, graphics hardware, memory and storage. There is no automatic switch to paid answers. Check excerpts and calculations in every mode.
 
-Device mode downloads the experimental Qwen 3 4B model from public hosts and requires WebGPU, compatible graphics hardware and sufficient storage/memory. Hosted mode sends the question, selected source excerpts and recent conversation through Coursekin to OpenAI. Its key stays in tab memory and clears on reload or switching to device mode. Both modes can be wrong; inspect the cited excerpts and reasoning. See [the browser edition guide](web/README.md) for limits, privacy and local preview.
+## Try the browser workspace
 
-## Earlier editions
+1. Open [Coursekin](https://coursekin.alx21.chatgpt.site), enter **Biology 101 practice** under **New class name** and select **Add class**.
+2. Upload [biology-textbook.txt](examples/biology-textbook.txt) and [practice-syllabus.md](examples/practice-syllabus.md). These original fictional files are included in the source download.
+3. Choose **On this device** and **Download model**, or choose **OpenAI with your key** and enter your key in the masked field. GPT-5.4 is the hosted default.
+4. Ask: **“What percentage is the final exam worth? Show me the source.”** The syllabus says **40 percent**. Open the source beneath the answer and check its text.
+5. Select **Export class backup**. Keep that JSON private. **Import class backup** creates another class containing its saved text and conversation.
 
-The host plugin and packaged Python app below remain separate editions. Their releases have not been rebuilt as browser inference apps; the earlier local app still uses its own configured provider. Use the website above for the no-paid-API workflow.
+The browser accepts searchable PDF, DOCX, TXT and Markdown, up to 25 MB and 600,000 extracted characters per file, with at most 1,500 PDF pages and 20 documents per class. Scanned PDFs need OCR first. Original upload binaries are not retained in backups.
 
-### Edition comparison
+Materials and conversation are saved in IndexedDB in this browser profile. Keep originals and a backup before clearing browser data or changing devices. Hosted mode sends your question, up to six selected excerpts and the last four messages through Coursekin to OpenAI. Its key stays in tab memory and clears on reload, leaving the page, **Clear key**, or switching to device mode. Backups exclude it. Read the [browser guide](web/README.md) for preview, cancellation and exact boundaries.
 
-| | OpenAI plugin | Local app |
-| :--- | :--- | :--- |
-| Best for | Studying in a compatible OpenAI host | A dedicated class workspace on your computer |
-| Setup | Install the plugin, then attach your materials in a chat | Download, install Python and launch the app |
-| API key | No separate API key | Your own OpenAI API key; API usage is billed separately |
-| Materials and conversations | Handled by the host and its privacy settings | Extracted text and history stored on your computer |
-| Answers | Uses the host model | Sends questions, recent conversation and selected excerpts to OpenAI |
-| Start here | [Plugin guide](docs/plugin-guide.md) | [Local app guide](docs/local-app.md) |
-
-The public website now supports its own browser study workflow. The older plugin and Python app handle materials separately. Classes do not automatically sync between them. The local app needs an internet connection for model answers.
-
-## Start with the plugin
-
-1. Open [Coursekin in the OpenAI plugin directory](https://chatgpt.com/plugins/plugins_6aaa22656ccc8191902ee998a70c8a86) and follow the install flow for your supported host.
-2. Start a new chat with Coursekin. Give it your class name and attach or paste your textbook and syllabus.
-3. Once it has read both, ask a question such as: “What does my syllabus say about grading? Show me the source.”
-
-Host availability and attachment support can vary. See the [plugin guide](docs/plugin-guide.md) if the install option or your files are unavailable.
-
-## Start with the local app
+## Run the Python local app
 
 1. Install **Python 3.12 or newer** from [python.org](https://www.python.org/downloads/).
-2. Open the [latest release](https://github.com/agammann/coursekin/releases/latest), download **`coursekin-local-source.zip`** from **Assets**, and extract the entire ZIP. Open its `coursekin` folder.
+2. Download **`coursekin-local-source.zip`** from the [release assets](https://github.com/agammann/coursekin/releases/latest), verify its SHA256 checksum and extract the entire archive. Open the `coursekin` folder.
 3. On **Windows**, double click **Start Coursekin.cmd**. On **macOS or Linux**, open a terminal in that folder and run `sh start.sh`.
-4. On first launch, paste your own OpenAI API key into the private terminal prompt. Input is hidden. Keep the terminal open while using the app.
-5. In the browser, name your class, add a textbook and syllabus, then select **Start asking questions**.
+4. On first launch, enter your own OpenAI API key in the hidden terminal prompt. Keep that terminal open while using the app.
+5. The launcher opens `http://127.0.0.1:8767`. Name your class, add a textbook and syllabus, then select **Start asking questions**. Upload the practice files above or paste their text.
 
-The launcher installs dependencies on first use and opens the local address `http://127.0.0.1:8767`. This address works only on your computer. If setup fails, follow the [operating system instructions and troubleshooting](docs/local-app.md).
+The launcher creates its Python environment and installs pinned dependencies. The local app accepts searchable PDF, DOCX, TXT, Markdown and pasted text; its limits differ from the browser edition. Read the [local app guide](docs/local-app.md) for manual setup, formats, model configuration and troubleshooting.
 
-![Coursekin local app with class name, textbook and syllabus setup](docs/coursekin-desktop.png)
+Numbered citations open retrieved passages and their filename/location. A successful answer is saved with its source excerpts. **Course materials** lets you add documents, export a readable copy or delete a class. The readable export cannot be imported. For recovery or an upgrade, stop the server and privately copy the entire `data` folder, including any SQLite sidecar files. Restore that folder while the server is stopped. Keep originals separately.
 
-*The custom workspace shown here belongs to the local app. The plugin uses its host’s chat interface.*
+![Coursekin local class setup](docs/coursekin-desktop.png)
 
-## Try a small practice class
+## Use the host plugin
 
-Use the fictional textbook and syllabus in [Try Coursekin](docs/try-coursekin.md). Save the excerpts as TXT files to upload in the browser edition, or paste them in the local app or plugin. The guide includes questions and expected source facts.
+The [Coursekin plugin](https://chatgpt.com/plugins/plugins_6aaa22656ccc8191902ee998a70c8a86) supplies tutoring instructions to a compatible host. Give it your class name and attach or paste a textbook and syllabus. It should verify access to both before saying the class is ready, then cite verified source locations for course facts.
 
-After setup, try asking:
+The release's `coursekin-plugin.zip` contains the instruction bundle, with no Coursekin server, account connection or API key. Local installation depends on the host. The public directory's published bundle remains version 0.1.0; v1 is the source release containing all three editions. Follow the [plugin guide](docs/plugin-guide.md) for installation and attachment limits. Availability, storage and access across conversations belong to the host.
 
-1. “Explain this idea using the textbook. Show me the relevant passage.”
-2. “Give me one practice question and wait for my answer.”
-3. “Check my reasoning and give me a hint for the next step.”
+## Check a first study session
 
-## What to expect
+The [practice guide](docs/try-coursekin.md) includes questions and source facts. The final exam is worth 40 percent, quizzes 20 percent and lab reports 40 percent. Scores of 70, 80 and 80 give **14 + 32 + 32 = 78 percent**. No late-work policy is supplied. Adding [exam-schedule.txt](examples/exam-schedule.txt) creates a deliberate conflict between June 11 and June 18; the answer should identify both sources and ask for clarification.
 
-The local app accepts searchable PDF, DOCX, TXT, Markdown and pasted text. Each file must be under 30 MB, and a class can hold up to 20 documents. Both a textbook and a syllabus are required for initial local setup. See [formats and limits](docs/local-app.md#formats-and-limits) for extraction details.
+Retrieval uses keyword matching and can miss relevant sections. Extraction can lose diagrams, equations and tables. Source-reference checks reject unknown citation IDs; they do not prove support or correct reasoning. Ask specific questions, open excerpts and follow your class rules for assistance.
 
-Scanned PDFs need OCR first. Diagrams, tables and complex equations may not survive text extraction. Local retrieval uses keyword search; broad summaries can miss relevant sections. Check important claims against the original material and follow your class rules for AI assistance.
+## Build on Coursekin
 
-The local app stores extracted text and conversations, not the original uploaded file binaries. Keep your originals. **Course materials** lets you add documents, export a readable copy or delete a class. Exports cannot currently be imported back into Coursekin.
+The [development guide](docs/development.md) covers source setup, checks and packaging. The browser uses plain JavaScript, IndexedDB and a Cloudflare Worker. The local app uses Python, SQLite and a separate JavaScript interface. The plugin consists of a manifest and tutoring guidance.
 
-Your API key stays in the server environment or private `.env.local` file. Do not share that file, your class database or private exports. The local server is intended for one person and must not be exposed to the internet. Read [Privacy](PRIVACY.md) and [Security](SECURITY.md) for the exact boundaries.
-
-## Guides and project information
-
-| Guide | What it covers |
+| Guide | Purpose |
 | :--- | :--- |
-| [Local app](docs/local-app.md) | Installation, daily use, settings, backups and troubleshooting |
-| [OpenAI plugin](docs/plugin-guide.md) | Installation, attachments and host limitations |
-| [Try Coursekin](docs/try-coursekin.md) | Fictional materials and questions for a first session |
-| [Development](docs/development.md) | Source setup, tests, configuration, packaging and contributions |
-| [Verification](docs/verification.md) | Completed checks and remaining verification limits |
-| [Plugin release](docs/plugin-release.md) | Publication record and proposed host acceptance cases |
-| [Design references](docs/design-sources.md) | Visual research and attribution |
+| [Browser edition](web/README.md) | Preview, local models, visitor keys and backups |
+| [Local app](docs/local-app.md) | Python setup, formats, recovery and configuration |
+| [Host plugin](docs/plugin-guide.md) | Installation, source access and host limits |
+| [Stability](STABILITY.md) | Supported v1 behavior and upgrades |
+| [Verification](docs/verification.md) | Checks, provider observations and limits |
+| [Third-party notices](THIRD_PARTY_NOTICES.md) | Library and model licenses |
 
-Automated tests and package builds run on Windows, Ubuntu and macOS in [GitHub Actions](https://github.com/agammann/coursekin/actions/workflows/checks.yml). Live local app checks on Windows and a fresh ChatGPT plugin tutoring session passed on September 19, 2026. Interactive macOS/Linux launches remain unverified; the [verification record](docs/verification.md) describes the completed checks and their limits.
-
-For a bug or documentation correction, [open an issue](https://github.com/agammann/coursekin/issues) with your operating system, Python version, steps and a redacted error message. Use fictional material to reproduce file problems. Follow [private reporting instructions](SECURITY.md#reporting-a-vulnerability) for a security issue.
+For a bug, include your operating system, edition, versions, steps and a redacted error. Use fictional material to reproduce document problems. Do not post keys, private textbooks, databases or backups. See [Security](SECURITY.md) for private reporting.
 
 [MIT license](LICENSE) · [Privacy](PRIVACY.md) · [Usage information](TERMS.md)
 
-Copyright 2026 Alexander Gregory Ammann. The license covers Coursekin code and original assets. Your uploaded materials retain their own rights.
+Copyright 2026 Alexander Gregory Ammann. The license covers Coursekin code and original assets. Uploaded materials and third-party components retain their own rights.

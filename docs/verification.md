@@ -1,5 +1,23 @@
 # Verification
 
+## October 7 v1 source checks
+
+The v1 review used original fictional biology files, with expectations fixed before each model request. The browser and Python app have separate interfaces, parsers and storage; their checks are recorded separately.
+
+The compiled browser workflow imported real TXT, Markdown, DOCX and searchable PDF files. Source snippets, rejected references, answer cancellation, absent passages, invalid backups, restore into a new class, deletion and reload were checked through the actual interface. An aborted IndexedDB transaction exposed an unsaved answer in a later export; saves now commit in-memory state only after storage succeeds. Storage failures also produce a useful error. The browser regression uses synthetic hosted responses for these failure cases and makes no paid request. Widths 1440, 390 and 320 had no horizontal overflow.
+
+The pinned PDF.js and fflate document readers were checked separately from the development lockfile and updated to patched releases. Real PDF and DOCX imports passed again. Unreadable PDFs close their worker and preserve saved materials; the next valid import succeeds.
+
+Real GPT-5.4 and GPT-5.4 mini browser responses each gave the correct 40-percent exam weight, `14 + 32 + 32 = 78` percent grade, missing late-work policy, conflicting June 11/June 18 dates and textbook explanation with known source IDs. These were first responses, not selected from retries. A representation check initially rejected mini's equivalent `78.0%`; the captured response was reviewed without another request.
+
+The Python app imported DOCX/PDF setup files and added TXT/Markdown materials. Its prior GPT-4.1 mini default calculated the grade but omitted the required clickable citations. The local provider now defaults to GPT-5.4 and uses structured output to validate known source numbers. Its changed provider passed the same course facts in one real request, with five retrieved source passages. Opening a citation, export, reload and layouts at all three widths passed. Copying the complete data folder while the server was stopped restored the class and conversation in a separate data directory; its recovered class could be opened, exported and deleted without another provider request.
+
+A real Chrome 155.0.8059.12 WebGPU run on an AMD RDNA3 adapter downloaded and initialized Qwen 3 4B. Actual download cancellation, generation cancellation and cached reload passed with no POST request or paid fallback. Its first completed multi-part answer gave the weight and biology facts but treated grading weights as score contributions, omitted the 78-percent total, listed both exam dates without clearly identifying the conflict, and omitted the schedule's citation. Device answers remain experimental; use specific questions, inspect sources and check calculations. This run does not establish reliable tutoring across questions or hardware.
+
+The Windows Python 3.12 suite ran 17 tests: 15 passed, while the macOS memory-monitor test and symlink-privilege test were skipped on this machine. Fourteen browser contract/retrieval tests passed. Frozen browser installation, build and dependency audit passed with no reported advisories. The source plugin's manifests, paths and unchanged tutoring guidance were reviewed independently. The directory-plugin and host attachment checks below remain dated historical observations; source-bundle checks do not refresh portal installation or host retention claims.
+
+Exact ZIP packaging, fresh release-consumer checks and the final source workflow are recorded with the release. Model observations are bounded examples, not an accuracy benchmark. Scanned OCR, every resource limit, all browser/hardware combinations and interactive macOS/Linux launcher use remain outside this review. Coursekin provides no native WebMCP tool interface.
+
 Initial checks ran on Windows with Python 3.12 and the Codex in app browser on September 15, 2026. The follow-up below records live checks on September 19. Historical checks are preserved rather than presented as newly rerun evidence.
 
 ## October 2 local app startup repair

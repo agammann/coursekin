@@ -8,4 +8,7 @@ playwright-report/
 __pycache__/
 .venv/
 dist/
+outputs/
+verification-artifacts/
+release-artifacts/
 *.sqlite3*
