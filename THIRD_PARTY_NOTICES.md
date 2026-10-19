@@ -8,7 +8,7 @@ Coursekin code and original assets use the [MIT license](LICENSE). These compone
 | WebLLM 0.2.85 and MLC runtime | Optional WebGPU inference | Apache-2.0; [WebLLM](https://github.com/mlc-ai/web-llm), [MLC LLM](https://github.com/mlc-ai/mlc-llm) |
 | PDF.js 6.4.299 | Browser PDF extraction | Apache-2.0; [PDF.js](https://github.com/mozilla/pdf.js) |
 | fflate 0.8.3 | Browser DOCX ZIP extraction | MIT; [fflate](https://github.com/101arrowz/fflate) |
-| pypdf 6.10.0 | Python PDF extraction | BSD-3-Clause; [pypdf](https://github.com/py-pdf/pypdf) |
+| pypdf 6.19.0 | Python PDF extraction | BSD-3-Clause; [pypdf](https://github.com/py-pdf/pypdf) |
 | psutil 7.2.2 | macOS parser memory checks | BSD-3-Clause; [psutil](https://github.com/giampaolo/psutil) |
 | Playwright 1.62.1 | Browser verification | Apache-2.0; [Playwright](https://github.com/microsoft/playwright) |
 | esbuild 0.28.1 | Browser build | MIT; [esbuild](https://github.com/evanw/esbuild) |
