@@ -22,6 +22,25 @@ def doc(role, text):
     return {'name': role + '.txt', 'role': role, 'text': text}
 
 class Documents(unittest.TestCase):
+    def test_pdf_compressed_stream_respects_decompression_limit(self):
+        from pypdf import PdfWriter, get_configuration
+        from pypdf.errors import LimitReachedError
+        from pypdf.generic import DecodedStreamObject, DictionaryObject, NameObject
+
+        writer = PdfWriter()
+        page = writer.add_blank_page(width=612, height=792)
+        font = DictionaryObject({NameObject('/Type'): NameObject('/Font'), NameObject('/Subtype'): NameObject('/Type1'), NameObject('/BaseFont'): NameObject('/Helvetica')})
+        page[NameObject('/Resources')] = DictionaryObject({NameObject('/Font'): DictionaryObject({NameObject('/F1'): writer._add_object(font)})})
+        content = DecodedStreamObject()
+        content.set_data(b'x' * 16_000_001)
+        page[NameObject('/Contents')] = writer._add_object(content.flate_encode())
+        output = io.BytesIO()
+        writer.write(output)
+        before = get_configuration()
+        with self.assertRaises(LimitReachedError):
+            extract('large.pdf', output.getvalue())
+        self.assertEqual(get_configuration(), before)
+
     def test_pdf_text_and_blank_rejection(self):
         from pypdf import PdfWriter
         from pypdf.generic import DecodedStreamObject, DictionaryObject, NameObject

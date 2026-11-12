@@ -9,6 +9,15 @@ import bootstrap
 
 
 class StartupRecovery(unittest.TestCase):
+    def test_dependency_check_matches_pinned_pypdf(self):
+        requirements = (bootstrap.ROOT / 'requirements.txt').read_text().splitlines()
+        pinned = next(line.split('==', 1)[1] for line in requirements if line.startswith('pypdf=='))
+        with patch('importlib.metadata.version', side_effect=lambda name: pinned if name == 'pypdf' else '7.2.2'):
+            exec(bootstrap.CHECK, {})
+        with patch('importlib.metadata.version', return_value='0.0.0'):
+            with self.assertRaises(AssertionError):
+                exec(bootstrap.CHECK, {})
+
     def test_retry_repairs_existing_environment_and_stops_on_failed_install(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
