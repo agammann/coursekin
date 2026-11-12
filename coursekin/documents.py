@@ -15,22 +15,21 @@ def extract(name, raw):
     ext = name.rsplit('.', 1)[-1].lower()
     pages = []
     if ext == 'pdf':
-        from pypdf import PdfReader
-        from pypdf import filters
-        filters.ZLIB_MAX_OUTPUT_LENGTH = 16_000_000
-        reader = PdfReader(io.BytesIO(raw), strict=False)
-        if reader.is_encrypted:
-            raise ValueError('This PDF is password protected. Please upload an unlocked copy.')
-        if len(reader.pages) > 2000:
-            raise ValueError('Please split PDFs longer than 2,000 pages into smaller volumes.')
-        total = 0
-        for i, page in enumerate(reader.pages):
-            text = page.extract_text() or ''
-            total += len(text)
-            if total > MAX_TEXT:
-                raise ValueError('This document contains too much text. Please upload a smaller section.')
-            if text.strip():
-                pages.append({'location': f'PDF page {i + 1}', 'text': text})
+        from pypdf import PdfReader, apply_configuration
+        with apply_configuration(zlib_maximum_output_length=16_000_000):
+            reader = PdfReader(io.BytesIO(raw), strict=False)
+            if reader.is_encrypted:
+                raise ValueError('This PDF is password protected. Please upload an unlocked copy.')
+            if len(reader.pages) > 2000:
+                raise ValueError('Please split PDFs longer than 2,000 pages into smaller volumes.')
+            total = 0
+            for i, page in enumerate(reader.pages):
+                text = page.extract_text() or ''
+                total += len(text)
+                if total > MAX_TEXT:
+                    raise ValueError('This document contains too much text. Please upload a smaller section.')
+                if text.strip():
+                    pages.append({'location': f'PDF page {i + 1}', 'text': text})
     elif ext == 'docx':
         with zipfile.ZipFile(io.BytesIO(raw)) as z:
             entries = z.infolist()
