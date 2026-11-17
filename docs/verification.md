@@ -1,5 +1,17 @@
 # Verification
 
+## November 17 1.0.1 checks
+
+The existing public Site 6 completed one actual Qwen 3 4B device answer using the original fictional syllabus. It correctly returned 40 percent for the final exam and exposed the matching source passage. A class backup and reload retained the class. Device mode remains experimental. Verify model answers against the material.
+
+The exact-main local browser exposed stale reading text after a missing visitor key and after an unreadable material import. The added missing-key harness assertion failed on that baseline. After the focused catch-block changes, all 45 compiled browser checks passed in Chromium 158.0.8127.18. They cover no request without a key, preserved drafts and saved classes, ended reading status, cancellation, real TXT, Markdown, DOCX and PDF readers, source links, backup recovery and 320, 390 and 1440 pixel layouts. No page errors occurred. Hosted answers in this harness used synthetic responses.
+
+An ordinary warm-tab replay also confirmed both corrected failures, the prior saved answer and materials, and a successful valid-file retry. The key-free Python app retained its earlier class and imported a new fictional DOCX/PDF class with pypdf 7.0.1. Its readable export contained the PDF page-one grading and exam-date passages with no conversation messages.
+
+Python 3.12.14 checks passed 17 tests with two expected platform skips from 19 total. Fourteen Node contract tests, the production Worker build, full browser dependency audit with zero findings and allowlist packaging passed using Node 24.22.1 and npm 11.19.1. Launcher repair selected pypdf 7.0.1 and its installed wheel digest matched the official PyPI metadata. The upstream advisory concerns image decoding. Coursekin performs bounded PDF text extraction.
+
+No real API key or paid provider request was used in this pass. The plugin's six source files and directory version 0.1.0 remain unchanged. Current portal installation and host attachment behavior were not retested. The October records below preserve their separate provider and host observations. Exact committed packaging, remote CI and release acceptance are separate gates.
+
 ## October 7 v1 source checks
 
 The v1 review used original fictional biology files, with expectations fixed before each model request. The browser and Python app have separate interfaces, parsers and storage; their checks are recorded separately.

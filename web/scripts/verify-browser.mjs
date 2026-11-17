@@ -54,6 +54,13 @@ try {
     ok('PDF extraction closes its worker', pdfWorkers.length > 0 && pdfWorkers.every(worker => worker.closed));
     ok('no upload POST during import', posts === 0);
     await page.locator('[name="answer-mode"][value="hosted"]').check();
+    const beforeMissingKey = await state();
+    await ask('What percent of the grading is the final exam?');
+    ok('missing key shows actionable error', (await page.locator('#study-error').innerText()).includes('Enter your own OpenAI API key'));
+    ok('missing key makes no provider request', posts === 0);
+    ok('missing key ends reading status', !(await page.locator('#task-status').innerText()).startsWith('Reading'));
+    ok('missing key preserves question', await page.locator('#question').inputValue() === 'What percent of the grading is the final exam?');
+    ok('missing key preserves saved class', JSON.stringify(await state()) === JSON.stringify(beforeMissingKey));
     const fakeKey = 'sk-' + 'fixture'.repeat(6);
     await page.locator('#hosted-key').fill(fakeKey);
     await ask('What percent of the grading is the final exam?');
@@ -73,6 +80,7 @@ try {
     await page.waitForFunction(() => !document.querySelector('#ask').disabled);
     ok('cancel keeps question', await page.locator('#question').inputValue() === 'What percent is the final exam worth?');
     ok('cancel preserves saved conversation', (await state())[0].messages.length === 2);
+    ok('cancel retains stopped status', (await page.locator('#task-status').innerText()).includes('Answer stopped'));
     const count = posts;
     await ask('xyznotfound');
     ok('missing passage stops before provider', posts === count);
@@ -129,6 +137,7 @@ try {
     await page.waitForFunction(() => !document.querySelector('#materials').disabled);
     ok('unreadable file preserves materials', (await state())[0].documents.length === 4);
     ok('unreadable file shows error', (await page.locator('#study-error').innerText()).length > 0);
+    ok('failed material import ends reading status', !(await page.locator('#task-status').innerText()).startsWith('Reading'));
     ok('malformed PDF closes its worker', pdfWorkers.every(worker => worker.closed));
     await page.locator('#materials').setInputFiles(path.join(out, 'fixtures/practice-syllabus.pdf'));
     await page.waitForFunction(() => !document.querySelector('#materials').disabled);

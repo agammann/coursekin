@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1
+
+- Clear stale reading status after a failed browser question or material import while preserving the error, question, saved class and cancellation behavior.
+- Select pypdf 7.0.1, the upstream patched release for [GHSA-fhff-j4m8-439h](https://github.com/py-pdf/pypdf/security/advisories/GHSA-fhff-j4m8-439h), in both dependency installation and launcher checks. Coursekin's bounded PDF text extraction remains unchanged.
+- Align source version metadata and dependency notices with the shipped requirements and browser lockfile. The instruction-only plugin remains version 0.1.0.
+
 ## 1.0.0
 
 Coursekin's first combined source release contains the browser workspace, Python local app and host tutoring bundle with separate setup and recovery guides.
