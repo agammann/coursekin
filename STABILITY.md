@@ -1,6 +1,6 @@
 # Coursekin v1
 
-The 1.0.0 source release contains the browser workspace, Python local app and host plugin instruction bundle. They have separate storage. The directory plugin remains version 0.1.0; installing a source ZIP does not update that listing.
+The 1.0.1 source release contains the browser workspace, Python local app and host plugin instruction bundle. They have separate storage. The directory plugin remains version 0.1.0 and installing a source ZIP does not update that listing.
 
 ## Supported behavior
 

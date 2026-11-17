@@ -2,7 +2,7 @@
 
 Name your class. Add your textbook and syllabus. Ask questions with source passages you can open and check.
 
-Coursekin helps you understand course material, practice a problem and check what your syllabus says. Its v1 source release includes three separate ways to study. Classes do not sync between them.
+Coursekin helps you understand course material, practice a problem and check what your syllabus says. Its 1.0.1 source release includes three separate ways to study. Classes do not sync between them.
 
 **[Open the browser workspace](https://coursekin.alx21.chatgpt.site)** · [Download](https://github.com/agammann/coursekin/releases/latest) · [Get help](https://github.com/agammann/coursekin/issues)
 
