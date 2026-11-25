@@ -9,7 +9,7 @@ CHECK = """
 import importlib.metadata as m
 import sys
 assert sys.version_info >= (3, 12)
-assert m.version('pypdf') == '7.0.1'
+assert m.version('pypdf') == '7.1.1'
 if sys.platform == 'darwin':
     assert m.version('psutil') == '7.2.2'
 """
